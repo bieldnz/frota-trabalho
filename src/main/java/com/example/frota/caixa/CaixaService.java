@@ -11,19 +11,25 @@ public class CaixaService {
     public CaixaService(CaixaRepository caixaRepository) {
         this.caixaRepository = caixaRepository;
     }
+
     // Métodos de serviço para gerenciar caix
+
     public List<Caixa> procurarTodos() {
         return caixaRepository.findAll();
     }
+
     public Optional<Caixa> procurarPorId(Long id) {
         return caixaRepository.findById(id);
     }
+
     public Caixa salvar(Caixa novaCaixa) {
         return caixaRepository.save(novaCaixa);
     }
+
     public void deletar(Long id) {
         caixaRepository.deleteById(id);
     }
+
     public Caixa atualizar(Caixa caixaAtualizada) {
         return caixaRepository.save(caixaAtualizada);
     }
