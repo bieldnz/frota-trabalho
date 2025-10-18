@@ -22,7 +22,23 @@ public record AtualizacaoCaminhao(
 	    Double cargaMaxima,
 	    
 	    @NotNull(message = "Marca é obrigatória")
-	    Long marcaId
+	    Long marcaId,
+
+        @NotNull(message = "Comprimento é obrigatório")
+        @Positive(message = "Comprimento deve ser positivo")
+        Double comprimento,
+
+        @NotNull(message = "Largura é obrigatória")
+        @Positive(message = "Largura deve ser positiva")
+        Double largura,
+
+        @NotNull(message = "Altura é obrigatória")
+        @Positive(message = "Altura deve ser positiva")
+        Double altura,
+
+        @NotNull(message = "Fator de cubagem é obrigatório")
+        @Positive(message = "Fator de cubagem deve ser positivo")
+        Double fatorCubagem
 	) {}
 
 

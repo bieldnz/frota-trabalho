@@ -39,6 +39,7 @@ public class Caminhao {
 	private double comprimento;
 	private double altura;
 	private double largura;
+	private double fatorCubagem;
 	private int ano;
 
 	public Caminhao(CadastroCaminhao dados, Marca marca) {
@@ -46,27 +47,44 @@ public class Caminhao {
 		this.placa = dados.placa();
 		this.cargaMaxima = dados.cargaMaxima();
 		this.marca = marca;
-		this.ano= dados.ano();
+		this.ano = dados.ano();
+		this.comprimento = dados.comprimento();
+		this.largura = dados.largura();
+		this.altura = dados.altura();
+		this.fatorCubagem = dados.fatorCubagem();
 	}
+
 	public Caminhao(AtualizacaoCaminhao dados, Marca marca) {
 		this.modelo = dados.modelo();
 		this.placa = dados.placa();
 		this.cargaMaxima = dados.cargaMaxima();
 		this.marca = marca;
-		this.ano= dados.ano();
+		this.ano = dados.ano();
+		this.comprimento = dados.comprimento();
+		this.largura = dados.largura();
+		this.altura = dados.altura();
+		this.fatorCubagem = dados.fatorCubagem();
 	}
 	
 	public void atualizarInformacoes(AtualizacaoCaminhao dados, Marca marca) {
-		if (dados.modelo() != null )
+		if (dados.modelo() != null)
 			this.modelo = dados.modelo();
 		if (dados.placa() != null)
-			this.placa =dados.placa();
+			this.placa = dados.placa();
 		if (dados.cargaMaxima() != 0)
 			this.cargaMaxima = dados.cargaMaxima();
 		if (marca != null)
 			this.marca = marca;
 		if (dados.ano() != 0)
 			this.ano = dados.ano();
+		if (dados.comprimento() != 0)
+			this.comprimento = dados.comprimento();
+		if (dados.largura() != 0)
+			this.largura = dados.largura();
+		if (dados.altura() != 0)
+			this.altura = dados.altura();
+		if (dados.fatorCubagem() != 0)
+			this.fatorCubagem = dados.fatorCubagem();
 	}
 	
 }
