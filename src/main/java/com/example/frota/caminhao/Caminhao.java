@@ -36,6 +36,9 @@ public class Caminhao {
 	private Marca marca;
 	private String placa;
 	private double cargaMaxima;
+	private double comprimento;
+	private double altura;
+	private double largura;
 	private int ano;
 
 	public Caminhao(CadastroCaminhao dados, Marca marca) {

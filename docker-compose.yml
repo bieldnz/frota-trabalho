@@ -6,11 +6,13 @@ services:
     container_name: frota-db
     environment:
       MYSQL_ROOT_PASSWORD: cco123
+      # Allow root connections from any host (not recommended for production)
+      MYSQL_ROOT_HOST: "%"
       MYSQL_DATABASE: frota
       MYSQL_USER: frota
       MYSQL_PASSWORD: frota
     ports:
-      - "3306:3306"
+      - "3307:3306"
     volumes:
       - db_data:/var/lib/mysql
     healthcheck:
@@ -30,8 +32,8 @@ services:
     environment:
       # Override Spring datasource to use the 'db' service name
       SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/frota?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: cco123
+      SPRING_DATASOURCE_USERNAME: frota
+      SPRING_DATASOURCE_PASSWORD: frota
       # Optional: tune JVM
       JAVA_OPTS: -XX:MaxRAMPercentage=75.0 -XX:+UseContainerSupport
       # Optional: override server port if needed
