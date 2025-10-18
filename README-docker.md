@@ -4,7 +4,7 @@ Este guia mostra como construir e executar a aplicação Spring Boot com Docker 
 
 ## Pré-requisitos
 - Docker Desktop (Windows) ou Docker Engine (WSL/Linux)
-- Opcional: Maven/Java localmente (não é necessário para rodar via Docker)
+- Opcional: Maven/Java localmente (não é necessário para rodar via Docker) fd
 
 ## Rodar com Docker Compose (recomendado)
 
