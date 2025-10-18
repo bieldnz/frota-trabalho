@@ -1,0 +1,46 @@
+version: "3.9"
+
+services:
+  db:
+    image: mysql:8.4
+    container_name: frota-db
+    environment:
+      MYSQL_ROOT_PASSWORD: cco123
+      MYSQL_DATABASE: frota
+      MYSQL_USER: frota
+      MYSQL_PASSWORD: frota
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: frota-app
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      # Override Spring datasource to use the 'db' service name
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/frota?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: cco123
+      # Optional: tune JVM
+      JAVA_OPTS: -XX:MaxRAMPercentage=75.0 -XX:+UseContainerSupport
+      # Optional: override server port if needed
+      # SERVER_PORT: 8083
+    ports:
+      - "8083:8083"
+    # If you prefer dev-mode with volume mounts, uncomment the line below and rebuild as needed
+    # volumes:
+    #   - ./:/workspace
+
+volumes:
+  db_data:

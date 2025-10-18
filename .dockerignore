@@ -1,0 +1,23 @@
+# Maven
+target/
+.mvn/
+
+# IDEs
+.idea/
+.vscode/
+*.iml
+
+# Git
+.git/
+.gitignore
+
+# OS / misc
+**/.DS_Store
+**/Thumbs.db
+
+# Node/npm (if any)
+node_modules/
+
+# Docker
+Dockerfile
+docker-compose.yml
