@@ -39,5 +39,16 @@ public class Caixa {
         this.largura = largura;
         this.profundidade = profundidade;
     }
+
+    public double getVolume() {
+        return profundidade * largura * altura;
+    }
+
+    public boolean cabeProduto(double produtoComprimento, double produtoLargura, double produtoAltura, double produtoPeso) {
+        return produtoComprimento <= profundidade &&
+               produtoLargura <= largura &&
+               produtoAltura <= altura &&
+               produtoPeso <= capacidadeKg;
+    }
     
 }
