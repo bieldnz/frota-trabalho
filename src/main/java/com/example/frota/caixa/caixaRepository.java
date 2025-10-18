@@ -1,6 +1,5 @@
 package com.example.frota.caixa;
 
-import java.lang.foreign.Linker.Option;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
