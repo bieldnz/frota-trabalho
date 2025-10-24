@@ -6,23 +6,23 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
 public record AtualizacaoCaminhao(
-	    Long id,
-	    @NotBlank(message = "Modelo é obrigatório") 
-	    String modelo,
-	    
-	    @NotBlank(message = "Placa é obrigatória")
-	    String placa,
-	    
-	    @NotNull(message = "Ano é obrigatório")
-	    @Min(value = 2000, message = "Ano deve ser a partir de 2000")
-	    Integer ano,
-	    
-	    @NotNull(message = "Carga máxima é obrigatória")
-	    @Positive(message = "Carga máxima deve ser positiva")
-	    Double cargaMaxima,
-	    
-	    @NotNull(message = "Marca é obrigatória")
-	    Long marcaId,
+        Long id,
+        @NotBlank(message = "Modelo é obrigatório") 
+        String modelo,
+        
+        @NotBlank(message = "Placa é obrigatória")
+        String placa,
+        
+        @NotNull(message = "Ano é obrigatório")
+        @Min(value = 2000, message = "Ano deve ser a partir de 2000")
+        Integer ano,
+        
+        @NotNull(message = "Carga máxima é obrigatória")
+        @Positive(message = "Carga máxima deve ser positiva")
+        Double cargaMaxima,
+        
+        @NotNull(message = "Marca é obrigatória")
+        Long marcaId,
 
         @NotNull(message = "Comprimento é obrigatório")
         @Positive(message = "Comprimento deve ser positivo")
@@ -34,11 +34,5 @@ public record AtualizacaoCaminhao(
 
         @NotNull(message = "Altura é obrigatória")
         @Positive(message = "Altura deve ser positiva")
-        Double altura,
-
-        @NotNull(message = "Fator de cubagem é obrigatório")
-        @Positive(message = "Fator de cubagem deve ser positivo")
-        Double fatorCubagem
-	) {}
-
-
+        Double altura
+) {}

@@ -1,22 +1,34 @@
 package com.example.frota.transporte;
 
 import java.util.List;
+import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.example.frota.caixa.Caixa;
+import com.example.frota.caminhao.Caminhao;
+import com.example.frota.caminhao.CaminhaoService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.maps.GeoApiContext;
 import com.google.maps.GeocodingApi;
 import com.google.maps.model.GeocodingResult;
 
+import jakarta.persistence.EntityNotFoundException;
+
 @Service
 public class TransporteService {
 
     @Value("${google.maps.api.key}")
     private String googleMapsApiKey;
+
+    @Autowired
+    private TransporteRepository transporteRepository;
+
+    @Autowired
+    private CaminhaoService caminhaoService;
 
     private static final double VALOR_POR_KM = 10.0;
 
@@ -63,5 +75,40 @@ public class TransporteService {
     public double calcularCustoPedagio(String origem, String destino) {
         //TODO: Implementar integração com API de mapas para cálculo real de custo de pedágio
         return 50.0; // Exemplo de custo fixo de pedágio
+    }
+
+    // ---------- CRUD para Transporte ----------
+
+    public Transporte salvarOuAtualizar(CadastroTransporte dto) {
+        Caminhao caminhao = caminhaoService.procurarPorId(dto.caminhaoId())
+                .orElseThrow(() -> new EntityNotFoundException("Caminhão não encontrado com ID: " + dto.caminhaoId()));
+
+        if (dto.id() != null) {
+            Transporte existente = transporteRepository.findById(dto.id())
+                    .orElseThrow(() -> new EntityNotFoundException("Transporte não encontrado com ID: " + dto.id()));
+            existente.setProduto(dto.produto());
+            existente.setCaminhao(caminhao);
+            existente.setComprimento(dto.comprimento());
+            existente.setLargura(dto.largura());
+            existente.setAltura(dto.altura());
+            existente.setMaterial(dto.material());
+            existente.setLimitePeso(dto.limitePeso());
+            return transporteRepository.save(existente);
+        } else {
+            Transporte novo = new Transporte(dto, caminhao);
+            return transporteRepository.save(novo);
+        }
+    }
+
+    public List<Transporte> procurarTodos() {
+        return transporteRepository.findAll();
+    }
+
+    public Optional<Transporte> procurarPorId(Long id) {
+        return transporteRepository.findById(id);
+    }
+
+    public void apagarPorId(Long id) {
+        transporteRepository.deleteById(id);
     }
 }

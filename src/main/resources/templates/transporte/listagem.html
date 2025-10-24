@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos/head :: head('Listagem de Transportes')}"></head>
+<body>
+    <header th:replace="~{fragmentos/header :: header(activePage='Transporte')}"></header>
+    <div class="container-fluid" style="max-width: 1000px; margin: 20px auto;">
+        <h2>Transportes</h2>
+
+        <div th:if="${message != null}" class="alert alert-success">[[${message}]]</div>
+        <div th:if="${error != null}" class="alert alert-danger">[[${error}]]</div>
+
+        <a th:href="@{/transporte/formulario}" class="btn btn-primary mb-3">Cadastrar Transporte</a>
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Produto</th>
+                    <th>Caminhão</th>
+                    <th>Comprimento</th>
+                    <th>Largura</th>
+                    <th>Altura</th>
+                    <th>Material</th>
+                    <th>Limite Peso</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="t : ${listaTransportes}">
+                    <td th:text="${t.id}"></td>
+                    <td th:text="${t.produto}"></td>
+                    <td th:text="${t.caminhao != null} ? ${t.caminhao.modelo} + ' - ' + ${t.caminhao.placa} : '-' "></td>
+                    <td th:text="${t.comprimento}"></td>
+                    <td th:text="${t.largura}"></td>
+                    <td th:text="${t.altura}"></td>
+                    <td th:text="${t.material}"></td>
+                    <td th:text="${t.limitePeso}"></td>
+                    <td>
+                        <a th:href="@{/transporte/formulario(id=${t.id})}" class="btn btn-sm btn-secondary">Editar</a>
+                        <a th:href="@{/transporte/delete/{id}(id=${t.id})}" class="btn btn-sm btn-danger" onclick="return confirm('Deseja realmente apagar?')">Apagar</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div th:replace="~{fragmentos/footer :: footer}"></div>
+</body>
+</html>

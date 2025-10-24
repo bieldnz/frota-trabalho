@@ -16,7 +16,6 @@ public interface CaminhaoMapper {
     @Mapping(target = "comprimento", source = "comprimento")
     @Mapping(target = "largura", source = "largura")
     @Mapping(target = "altura", source = "altura")
-    @Mapping(target = "fatorCubagem", source = "fatorCubagem")
     AtualizacaoCaminhao toAtualizacaoDto(Caminhao caminhao);
     
     // Converte DTO para Entity (para criação NOVA - ignora ID)
@@ -25,7 +24,6 @@ public interface CaminhaoMapper {
     @Mapping(target = "comprimento", source = "comprimento")
     @Mapping(target = "largura", source = "largura")
     @Mapping(target = "altura", source = "altura")
-    @Mapping(target = "fatorCubagem", source = "fatorCubagem")
     Caminhao toEntityFromAtualizacao(AtualizacaoCaminhao dto);
     
     // Atualiza Entity existente com dados do DTO
