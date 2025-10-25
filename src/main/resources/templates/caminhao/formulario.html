@@ -100,14 +100,6 @@
 					th:classappend="${#fields.hasErrors('altura')} ? 'is-invalid'">
 				<div th:errors="*{altura}" class="invalid-feedback"></div>
 			</div>
-
-			<div class="form-group">
-				<label for="fatorCubagem">Fator de Cubagem:</label>
-				<input class="form-control" type="number" step="0.01"
-					th:field="*{fatorCubagem}"
-					th:classappend="${#fields.hasErrors('fatorCubagem')} ? 'is-invalid'">
-				<div th:errors="*{fatorCubagem}" class="invalid-feedback"></div>
-			</div>
 			
 			<button type="submit" class="btn btn-primary">
                 <span th:text="${caminhao.id != null} ? 'Atualizar' : 'Cadastrar'"></span>

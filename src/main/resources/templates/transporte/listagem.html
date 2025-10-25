@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos/head :: head('Listagem de Transportes')}"></head>
+<body>
+    <header th:replace="~{fragmentos/header :: header(activePage='Transporte')}"></header>
+    <div class="container-fluid" style="max-width: 1000px; margin: 20px auto;">
+        <h2>Transportes</h2>
+
+        <div th:if="${message != null}" class="alert alert-success">[[${message}]]</div>
+        <div th:if="${error != null}" class="alert alert-danger">[[${error}]]</div>
+
+        <a th:href="@{/transporte/formulario}" class="btn btn-primary mb-3">Cadastrar Transporte</a>
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Produto</th>
+                    <th>Caixa</th>
+                    <th>Comprimento</th>
+                    <th>Largura</th>
+                    <th>Altura</th>
+                    <th>Peso</th>
+                    <th>Quantidade</th>
+                    <th>Origem</th>
+                    <th>Destino</th>
+                    <th>Valor Frete</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="t : ${listaTransportes}">
+                    <td th:text="${t.produto}"></td>
+                    <td th:text="${t.caixa != null} ? ${t.caixa.material} : '-' "></td>
+                    <td th:text="${t.comprimento}"></td>
+                    <td th:text="${t.largura}"></td>
+                    <td th:text="${t.altura}"></td>
+                    <td th:text="${t.peso}"></td>
+                    <td th:text="${t.quantidade}"></td>
+                    <td th:text="${t.origem}"></td>
+                    <td th:text="${t.destino}"></td>
+                    <td th:text="${t.valorFrete}"></td>
+                    <td>
+                        <a th:href="@{/transporte/formulario(id=${t.id})}" class="btn btn-sm btn-secondary">Editar</a>
+                        <a th:href="@{/transporte/delete/{id}(id=${t.id})}" class="btn btn-sm btn-danger" onclick="return confirm('Deseja realmente apagar?')">Apagar</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div th:replace="~{fragmentos/footer :: footer}"></div>
+</body>
+</html>

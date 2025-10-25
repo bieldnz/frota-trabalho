@@ -57,8 +57,7 @@ public class CaminhaoController {
                 null,  // marcaId
                 null,  // comprimento
                 null,  // largura
-                null,  // altura
-                null   // fatorCubagem
+                null  // altura
             );
         }
         model.addAttribute("caminhao", dto);

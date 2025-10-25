@@ -39,7 +39,6 @@ public class Caminhao {
 	private double comprimento;
 	private double altura;
 	private double largura;
-	private double fatorCubagem;
 	private int ano;
 
 	public Caminhao(CadastroCaminhao dados, Marca marca) {
@@ -51,7 +50,6 @@ public class Caminhao {
 		this.comprimento = dados.comprimento();
 		this.largura = dados.largura();
 		this.altura = dados.altura();
-		this.fatorCubagem = dados.fatorCubagem();
 	}
 
 	public Caminhao(AtualizacaoCaminhao dados, Marca marca) {
@@ -63,7 +61,6 @@ public class Caminhao {
 		this.comprimento = dados.comprimento();
 		this.largura = dados.largura();
 		this.altura = dados.altura();
-		this.fatorCubagem = dados.fatorCubagem();
 	}
 	
 	public void atualizarInformacoes(AtualizacaoCaminhao dados, Marca marca) {
@@ -83,8 +80,80 @@ public class Caminhao {
 			this.largura = dados.largura();
 		if (dados.altura() != 0)
 			this.altura = dados.altura();
-		if (dados.fatorCubagem() != 0)
-			this.fatorCubagem = dados.fatorCubagem();
 	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getModelo() {
+		return modelo;
+	}
+
+	public void setModelo(String modelo) {
+		this.modelo = modelo;
+	}
+
+	public Marca getMarca() {
+		return marca;
+	}
+
+	public void setMarca(Marca marca) {
+		this.marca = marca;
+	}
+
+	public String getPlaca() {
+		return placa;
+	}
+
+	public void setPlaca(String placa) {
+		this.placa = placa;
+	}
+
+	public double getCargaMaxima() {
+		return cargaMaxima;
+	}
+
+	public void setCargaMaxima(double cargaMaxima) {
+		this.cargaMaxima = cargaMaxima;
+	}
+
+	public double getComprimento() {
+		return comprimento;
+	}
+
+	public void setComprimento(double comprimento) {
+		this.comprimento = comprimento;
+	}
+
+	public double getAltura() {
+		return altura;
+	}
+
+	public void setAltura(double altura) {
+		this.altura = altura;
+	}
+
+	public double getLargura() {
+		return largura;
+	}
+
+	public void setLargura(double largura) {
+		this.largura = largura;
+	}
+
+	public int getAno() {
+		return ano;
+	}
+
+	public void setAno(int ano) {
+		this.ano = ano;
+	}
+	
+	
 	
 }

@@ -34,10 +34,7 @@ public record CadastroCaminhao(
 
 		@NotNull(message = "Altura é obrigatória")
 		@Positive(message = "Altura deve ser positiva")
-		double altura,
 
-		@NotNull(message = "Fator de cubagem é obrigatório")
-		@Positive(message = "Fator de cubagem deve ser positivo")
-		double fatorCubagem
+
+		double altura
 ) {}
-
