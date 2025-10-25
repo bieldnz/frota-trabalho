@@ -14,27 +14,31 @@
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>ID</th>
                     <th>Produto</th>
-                    <th>Caminhão</th>
+                    <th>Caixa</th>
                     <th>Comprimento</th>
                     <th>Largura</th>
                     <th>Altura</th>
-                    <th>Material</th>
-                    <th>Limite Peso</th>
+                    <th>Peso</th>
+                    <th>Quantidade</th>
+                    <th>Origem</th>
+                    <th>Destino</th>
+                    <th>Valor Frete</th>
                     <th>Ações</th>
                 </tr>
             </thead>
             <tbody>
                 <tr th:each="t : ${listaTransportes}">
-                    <td th:text="${t.id}"></td>
                     <td th:text="${t.produto}"></td>
-                    <td th:text="${t.caminhao != null} ? ${t.caminhao.modelo} + ' - ' + ${t.caminhao.placa} : '-' "></td>
+                    <td th:text="${t.caixa != null} ? ${t.caixa.material} : '-' "></td>
                     <td th:text="${t.comprimento}"></td>
                     <td th:text="${t.largura}"></td>
                     <td th:text="${t.altura}"></td>
-                    <td th:text="${t.material}"></td>
-                    <td th:text="${t.limitePeso}"></td>
+                    <td th:text="${t.peso}"></td>
+                    <td th:text="${t.quantidade}"></td>
+                    <td th:text="${t.origem}"></td>
+                    <td th:text="${t.destino}"></td>
+                    <td th:text="${t.valorFrete}"></td>
                     <td>
                         <a th:href="@{/transporte/formulario(id=${t.id})}" class="btn btn-sm btn-secondary">Editar</a>
                         <a th:href="@{/transporte/delete/{id}(id=${t.id})}" class="btn btn-sm btn-danger" onclick="return confirm('Deseja realmente apagar?')">Apagar</a>

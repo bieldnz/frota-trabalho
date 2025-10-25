@@ -12,8 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.example.frota.caminhao.Caminhao;
-import com.example.frota.caminhao.CaminhaoService;
+import com.example.frota.caixa.CaixaService;
 
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
@@ -27,7 +26,7 @@ public class TransporteController {
     private TransporteService transporteService;
 
     @Autowired
-    private CaminhaoService caminhaoService;
+    private CaixaService caixaService;
 
     // Suporta tanto /transporte quanto /transporte/listagem
     @GetMapping({"", "/listagem"})
@@ -45,18 +44,21 @@ public class TransporteController {
             dto = new CadastroTransporte(
                     existente.getId(),
                     existente.getProduto() != null ? existente.getProduto() : "",
-                    existente.getCaminhao() != null ? existente.getCaminhao().getId() : null,
                     existente.getComprimento(),
                     existente.getLargura(),
                     existente.getAltura(),
-                    existente.getMaterial(),
-                    existente.getLimitePeso()
+                    existente.getCaixa() != null ? existente.getCaixa().getId() : null,
+                    existente.getPeso(),
+                    existente.getQuantidade(),
+                    existente.getOrigem(),
+                    existente.getDestino(),
+                    existente.getValorFrete()
             );
         } else {
-            dto = new CadastroTransporte(null, "", null, null, null, null, null, null);
+            dto = new CadastroTransporte(null, null, 0, 0, 0, null, 0, 0, null, null, 0);
         }
         model.addAttribute("transporte", dto);
-        model.addAttribute("caminhoes", caminhaoService.procurarTodos());
+        model.addAttribute("caixas", caixaService.procurarTodos());
         return "transporte/formulario";
     }
 
@@ -66,7 +68,7 @@ public class TransporteController {
                          RedirectAttributes redirectAttributes,
                          Model model) {
         if (result.hasErrors()) {
-            model.addAttribute("caminhoes", caminhaoService.procurarTodos());
+            model.addAttribute("caixas", caixaService.procurarTodos());
             return "transporte/formulario";
         }
 

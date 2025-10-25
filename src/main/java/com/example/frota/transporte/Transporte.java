@@ -1,7 +1,8 @@
 package com.example.frota.transporte;
 
-import com.example.frota.caminhao.Caminhao;
+import com.example.frota.caixa.Caixa;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -27,92 +28,31 @@ public class Transporte {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String produto;
+		@ManyToOne(fetch = FetchType.LAZY)
+		@JoinColumn(name = "caixa_id", referencedColumnName = "caixa_id")
+    Caixa caixa;
 
-    @ManyToOne
-    @JoinColumn(name = "caminhao_id")
-    private Caminhao caminhao;
+		String produto;
 
-    private Double comprimento;
-    private Double largura;
-    private Double altura;
-    private String material;
-    private Double limitePeso;
+    double comprimento;
+    double largura;
+    double altura;
+    double peso;
+    int quantidade;
+    String origem;
+    String destino;
+		double valorFrete;
 
-    public Transporte(CadastroTransporte dto, Caminhao caminhao) {
-        this.produto = dto.produto();
-        this.caminhao = caminhao;
+    public Transporte(CadastroTransporte dto, Caixa caixa) {
         this.comprimento = dto.comprimento();
-        this.largura = dto.largura();
-        this.altura = dto.altura();
-        this.material = dto.material();
-        this.limitePeso = dto.limitePeso();
+				this.produto = dto.produto();
+				this.largura = dto.largura();
+				this.altura = dto.altura();
+				this.peso = dto.peso();
+				this.quantidade = dto.quantidade();
+				this.caixa = caixa;
+				this.origem = dto.origem();
+				this.destino = dto.destino();
     }
 
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getProduto() {
-		return produto;
-	}
-
-	public void setProduto(String produto) {
-		this.produto = produto;
-	}
-
-	public Caminhao getCaminhao() {
-		return caminhao;
-	}
-
-	public void setCaminhao(Caminhao caminhao) {
-		this.caminhao = caminhao;
-	}
-
-	public Double getComprimento() {
-		return comprimento;
-	}
-
-	public void setComprimento(Double comprimento) {
-		this.comprimento = comprimento;
-	}
-
-	public Double getLargura() {
-		return largura;
-	}
-
-	public void setLargura(Double largura) {
-		this.largura = largura;
-	}
-
-	public Double getAltura() {
-		return altura;
-	}
-
-	public void setAltura(Double altura) {
-		this.altura = altura;
-	}
-
-	public String getMaterial() {
-		return material;
-	}
-
-	public void setMaterial(String material) {
-		this.material = material;
-	}
-
-	public Double getLimitePeso() {
-		return limitePeso;
-	}
-
-	public void setLimitePeso(Double limitePeso) {
-		this.limitePeso = limitePeso;
-	}
-    
-    
-    
 }
