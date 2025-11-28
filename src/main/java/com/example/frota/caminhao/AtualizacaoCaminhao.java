@@ -34,5 +34,9 @@ public record AtualizacaoCaminhao(
 
         @NotNull(message = "Altura é obrigatória")
         @Positive(message = "Altura deve ser positiva")
-        Double altura
+        Double altura,
+        
+        @NotNull(message = "Quilometragem atual é obrigatória")
+        @Min(value = 0, message = "Quilometragem deve ser um valor positivo")
+        Double kmAtual
 ) {}

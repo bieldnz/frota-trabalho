@@ -10,6 +10,11 @@ import org.springframework.stereotype.Service;
 
 import com.example.frota.caixa.Caixa;
 import com.example.frota.caixa.CaixaService;
+
+// Imports do Logger simulado
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.maps.DistanceMatrixApi;
 import com.google.maps.GeoApiContext;
 import com.google.maps.model.DistanceMatrix;
@@ -19,6 +24,7 @@ import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class TransporteService {
+    private static final Logger logger = LoggerFactory.getLogger(TransporteService.class);
 
     @Value("${google.maps.api.key}")
     private String googleMapsApiKey;
@@ -36,8 +42,6 @@ public class TransporteService {
     private static final double VALOR_POR_KG = 1.0;
 
     private static final double FATOR_CUBAGEM = 300;
-
-    // ---------- CRUD para Transporte ----------
 
     public Transporte salvarOuAtualizar(CadastroTransporte dto) {
         Caixa caixa = caixaService.procurarPorId(dto.caixaId())
@@ -58,21 +62,21 @@ public class TransporteService {
         if (dto.id() != null) {
             Transporte existente = transporteRepository.findById(dto.id())
                     .orElseThrow(() -> new EntityNotFoundException("Transporte não encontrado com ID: " + dto.id()));
-            existente.setProduto(dto.produto());
-            existente.setCaixa(caixa);
-            existente.setComprimento(dto.comprimento());
-            existente.setLargura(dto.largura());
-            existente.setAltura(dto.altura());
-            existente.setOrigem(dto.origem());
-            existente.setDestino(dto.destino());
-            existente.setValorFrete(valorFrete);
-            existente.setPeso(dto.peso());
+            existente.atualizar(dto, caixa, valorFrete);
             return transporteRepository.save(existente);
         } else {
             Transporte novo = new Transporte(dto, caixa);
-            novo.setValorFrete(valorFrete);
+            novo.setValorFrete(valorFrete); // Definindo o valor de frete calculado
             return transporteRepository.save(novo);
         }
+    }
+
+    public Transporte atualizarStatus(Long id, StatusEntrega novoStatus) {
+        Transporte transporte = transporteRepository.findById(id)
+            .orElseThrow(() -> new EntityNotFoundException("Transporte não encontrado com ID: " + id));
+        
+        transporte.setStatus(novoStatus);
+        return transporteRepository.save(transporte);
     }
 
     public List<Transporte> procurarTodos() {
@@ -132,7 +136,7 @@ public class TransporteService {
 
             return new Pair<>(distanceKm, Double.parseDouble(fee.toPlainString()));
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Erro ao calcular distância entre {} e {}", origem, destino, e);
             throw new RuntimeException("Erro ao calcular distância entre " + origem + " e " + destino);
         }
 

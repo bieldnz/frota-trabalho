@@ -1,6 +1,8 @@
 package com.example.frota.transporte;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 
 public record CadastroTransporte(
     Long id,
@@ -11,8 +13,13 @@ public record CadastroTransporte(
     Long caixaId,
     double peso,
     int quantidade,
-    String origem,
-    String destino,
-    double valorFrete
+    @NotBlank String origem,
+    @NotBlank String destino,
+    
+    @NotNull(message = "O horário de retirada é obrigatório") 
+    LocalDateTime horarioRetirada,
+    
+    @NotBlank(message = "O status de pagamento é obrigatório") 
+    String statusPagamento 
 ) {
 }

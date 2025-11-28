@@ -1,16 +1,16 @@
 package com.example.frota.transporte;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody; 
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.bind.annotation.RestController; 
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.example.frota.caixa.CaixaService;
 
@@ -18,7 +18,11 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 
-@Controller
+import java.net.URI;
+import java.util.List;
+
+
+@RestController 
 @RequestMapping("/transporte")
 public class TransporteController {
 
@@ -28,70 +32,78 @@ public class TransporteController {
     @Autowired
     private CaixaService caixaService;
 
-    // Suporta tanto /transporte quanto /transporte/listagem
-    @GetMapping({"", "/listagem"})
-    public String listarTransporte(Model model) {
-        model.addAttribute("listaTransportes", transporteService.procurarTodos());
-        return "transporte/listagem";
+
+   @GetMapping
+    // Retorna Transporte (com valorFrete e status)
+    public ResponseEntity<List<Transporte>> listarTransporte() {
+        return ResponseEntity.ok(transporteService.procurarTodos());
     }
 
-    @GetMapping("/formulario")
-    public String mostrarFormulario(@RequestParam(required = false) Long id, Model model) {
-        CadastroTransporte dto;
-        if (id != null) {
-            Transporte existente = transporteService.procurarPorId(id)
-                    .orElseThrow(() -> new EntityNotFoundException("Transporte não encontrado"));
-            dto = new CadastroTransporte(
-                    existente.getId(),
-                    existente.getProduto() != null ? existente.getProduto() : "",
-                    existente.getComprimento(),
-                    existente.getLargura(),
-                    existente.getAltura(),
-                    existente.getCaixa() != null ? existente.getCaixa().getId() : null,
-                    existente.getPeso(),
-                    existente.getQuantidade(),
-                    existente.getOrigem(),
-                    existente.getDestino(),
-                    existente.getValorFrete()
-            );
-        } else {
-            dto = new CadastroTransporte(null, null, 0, 0, 0, null, 0, 0, null, null, 0);
-        }
-        model.addAttribute("transporte", dto);
-        model.addAttribute("caixas", caixaService.procurarTodos());
-        return "transporte/formulario";
+    @GetMapping("/{id}")
+    public ResponseEntity<Transporte> buscarPorId(@PathVariable Long id) {
+        Transporte existente = transporteService.procurarPorId(id)
+                .orElseThrow(() -> new EntityNotFoundException("Transporte não encontrado com ID: " + id));
+        return ResponseEntity.ok(existente);
     }
 
-    @PostMapping("/salvar")
-    public String salvar(@ModelAttribute("transporte") @Valid CadastroTransporte dto,
-                         BindingResult result,
-                         RedirectAttributes redirectAttributes,
-                         Model model) {
-        if (result.hasErrors()) {
-            model.addAttribute("caixas", caixaService.procurarTodos());
-            return "transporte/formulario";
+    @PostMapping
+    @Transactional
+    public ResponseEntity<?> cadastrar(@RequestBody @Valid CadastroTransporte dto) {
+        if (dto.id() != null) {
+            return ResponseEntity.badRequest().body("Não é possível cadastrar um transporte com ID. Use PUT para atualização.");
         }
-
         try {
             Transporte salvo = transporteService.salvarOuAtualizar(dto);
-            String mensagem = dto.id() != null ? "Transporte atualizado com sucesso!" : "Transporte cadastrado com sucesso!";
-            redirectAttributes.addFlashAttribute("message", mensagem);
-            return "redirect:/transporte";
+
+            URI location = ServletUriComponentsBuilder
+					.fromCurrentRequest()
+					.path("/{id}")
+					.buildAndExpand(salvo.getId())
+					.toUri();
+            
+            return ResponseEntity.created(location).body(salvo);
+        } catch (EntityNotFoundException | IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+    
+    @PutMapping("/{id}")
+    @Transactional
+    public ResponseEntity<?> atualizar(@PathVariable Long id, @RequestBody @Valid CadastroTransporte dto) {
+        if (!id.equals(dto.id())) {
+            return ResponseEntity.badRequest().body("O ID do transporte na URL não corresponde ao ID no corpo da requisição.");
+        }
+        try {
+            Transporte atualizado = transporteService.salvarOuAtualizar(dto);
+            return ResponseEntity.ok(atualizado);
+        } catch (EntityNotFoundException | IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+    
+    // Atualizar status do transporte
+    @PutMapping("/{id}/status/{status}")
+    @Transactional
+    public ResponseEntity<?> atualizarStatus(@PathVariable Long id, @PathVariable StatusEntrega status) {
+        try {
+            Transporte atualizado = transporteService.atualizarStatus(id, status);
+            return ResponseEntity.ok(atualizado);
         } catch (EntityNotFoundException e) {
-            redirectAttributes.addFlashAttribute("error", e.getMessage());
-            return "redirect:/transporte/formulario" + (dto.id() != null ? "?id=" + dto.id() : "");
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Erro ao atualizar status: " + e.getMessage());
         }
     }
 
-    @GetMapping("/delete/{id}")
+
+    @DeleteMapping("/{id}")
     @Transactional
-    public String delete(@PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
+    public ResponseEntity<?> delete(@PathVariable("id") Long id) {
         try {
             transporteService.apagarPorId(id);
-            redirectAttributes.addFlashAttribute("message", "Transporte " + id + " foi apagado!");
+            return ResponseEntity.noContent().build(); 
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            return ResponseEntity.badRequest().body("Erro ao apagar transporte com ID " + id);
         }
-        return "redirect:/transporte";
     }
 }

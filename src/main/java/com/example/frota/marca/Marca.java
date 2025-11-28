@@ -33,10 +33,12 @@ public class Marca {
 		this.nome=dados.nome();
 		this.pais= dados.pais();
 	}
-	
+
 	public void atualizarInformacoes(@Valid DadosAtualizacaoMarca dados) {
-		if (dados.nome() != null) {
+		if (dados.nome() != null && !dados.nome().isBlank()) {
 			this.nome = dados.nome();
+		}
+        if (dados.pais() != null && !dados.pais().isBlank()) {
 			this.pais = dados.pais();
 		}
 	}

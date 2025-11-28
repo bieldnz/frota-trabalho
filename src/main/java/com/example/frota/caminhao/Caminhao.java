@@ -40,17 +40,7 @@ public class Caminhao {
 	private double altura;
 	private double largura;
 	private int ano;
-
-	public Caminhao(CadastroCaminhao dados, Marca marca) {
-		this.modelo = dados.modelo();
-		this.placa = dados.placa();
-		this.cargaMaxima = dados.cargaMaxima();
-		this.marca = marca;
-		this.ano = dados.ano();
-		this.comprimento = dados.comprimento();
-		this.largura = dados.largura();
-		this.altura = dados.altura();
-	}
+    private double kmAtual = 0.0; 
 
 	public Caminhao(AtualizacaoCaminhao dados, Marca marca) {
 		this.modelo = dados.modelo();
@@ -61,6 +51,7 @@ public class Caminhao {
 		this.comprimento = dados.comprimento();
 		this.largura = dados.largura();
 		this.altura = dados.altura();
+        this.kmAtual = dados.kmAtual() != null ? dados.kmAtual() : 0.0; 
 	}
 	
 	public void atualizarInformacoes(AtualizacaoCaminhao dados, Marca marca) {
@@ -80,6 +71,8 @@ public class Caminhao {
 			this.largura = dados.largura();
 		if (dados.altura() != 0)
 			this.altura = dados.altura();
+        if (dados.kmAtual() != null && dados.kmAtual() >= 0) // Atualiza KM se fornecido
+            this.kmAtual = dados.kmAtual();
 	}
 
 	public Long getId() {
@@ -153,7 +146,12 @@ public class Caminhao {
 	public void setAno(int ano) {
 		this.ano = ano;
 	}
-	
-	
-	
+
+    public double getKmAtual() {
+        return kmAtual;
+    }
+
+    public void setKmAtual(double kmAtual) {
+        this.kmAtual = kmAtual;
+    }
 }
