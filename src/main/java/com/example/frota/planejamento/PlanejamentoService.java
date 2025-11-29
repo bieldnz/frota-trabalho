@@ -27,7 +27,7 @@ public class PlanejamentoService {
     /**
      * Calcula o peso total e o volume total para um lote de transportes.
      */
-    public CargaResumo calcularResumoCarga(List<Long> transportesIds) {
+    /*public CargaResumo calcularResumoCarga(List<Long> transportesIds) {
         List<Transporte> transportes = transporteService.procurarTodos().stream()
                 .filter(t -> transportesIds.contains(t.getId()))
                 .toList();
@@ -42,7 +42,25 @@ public class PlanejamentoService {
             .sum();
 
         return new CargaResumo(pesoTotal, volumeTotal, transportes);
+    }*/
+
+    public CargaResumo calcularResumoCarga(List<Long> transportesIds) {
+    // CORREÇÃO: Usa o novo método para buscar transportes EFICIENTEMENTE por ID
+    List<Transporte> transportes = transporteService.procurarPorIds(transportesIds);
+    
+    if (transportes.size() != transportesIds.size()) {
+        // Se a lista retornada for menor que a lista de IDs, algo não foi encontrado
+        throw new EntityNotFoundException("Um ou mais Transportes não foram encontrados.");
     }
+    
+    // As entidades Transporte estão corretas e prontas para o cálculo
+    double pesoTotal = transportes.stream().mapToDouble(Transporte::getPeso).sum();
+    double volumeTotal = transportes.stream()
+        .mapToDouble(t -> t.getComprimento() * t.getLargura() * t.getAltura() * FATOR_CUBAGEM)
+        .sum();
+
+    return new CargaResumo(pesoTotal, volumeTotal, transportes);
+}
 
     /**
      * Sugere o caminhão mais adequado para um lote de transportes com base na capacidade,

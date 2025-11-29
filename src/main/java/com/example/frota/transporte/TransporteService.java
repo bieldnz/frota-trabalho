@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import jakarta.transaction.Transactional; // Import adicionado
 
 import com.example.frota.caixa.Caixa;
 import com.example.frota.caixa.CaixaService;
@@ -43,7 +44,8 @@ public class TransporteService {
 
     private static final double FATOR_CUBAGEM = 300;
 
-    public Transporte salvarOuAtualizar(CadastroTransporte dto) {
+    @Transactional // Transação adicionada
+    public DetalheTransporteDto salvarOuAtualizar(CadastroTransporte dto) { // Retorna DTO
         Caixa caixa = caixaService.procurarPorId(dto.caixaId())
                 .orElseThrow(() -> new EntityNotFoundException("Caixa não encontrada com ID: " + dto.caixaId()));
 
@@ -59,32 +61,58 @@ public class TransporteService {
             dto.destino()
         );
 
+        Transporte salvo;
+
         if (dto.id() != null) {
             Transporte existente = transporteRepository.findById(dto.id())
                     .orElseThrow(() -> new EntityNotFoundException("Transporte não encontrado com ID: " + dto.id()));
             existente.atualizar(dto, caixa, valorFrete);
-            return transporteRepository.save(existente);
+            salvo = transporteRepository.save(existente);
         } else {
             Transporte novo = new Transporte(dto, caixa);
             novo.setValorFrete(valorFrete); // Definindo o valor de frete calculado
-            return transporteRepository.save(novo);
+            salvo = transporteRepository.save(novo);
         }
+        
+        // Mapeia para DTO DENTRO da transação
+        return new DetalheTransporteDto(salvo);
     }
-
-    public Transporte atualizarStatus(Long id, StatusEntrega novoStatus) {
+    
+    @Transactional
+    public DetalheTransporteDto atualizarStatus(Long id, StatusEntrega novoStatus) {
         Transporte transporte = transporteRepository.findById(id)
             .orElseThrow(() -> new EntityNotFoundException("Transporte não encontrado com ID: " + id));
         
         transporte.setStatus(novoStatus);
-        return transporteRepository.save(transporte);
+        Transporte atualizado = transporteRepository.save(transporte);
+        
+        // Mapeia para DTO dentro da transação
+        return new DetalheTransporteDto(atualizado);
     }
 
-    public List<Transporte> procurarTodos() {
-        return transporteRepository.findAll();
+    // Retorna lista de DTOs e usa Fetch Join
+    public List<DetalheTransporteDto> procurarTodos() {
+        return transporteRepository.findAllWithCaixa().stream()
+                .map(DetalheTransporteDto::new)
+                .toList();
+    }
+    
+    // Retorna lista de DTOs e usa Fetch Join
+    public List<DetalheTransporteDto> procurarPorCaixaId(Long caixaId) {
+        return transporteRepository.findAllByCaixaIdWithCaixa(caixaId).stream()
+                .map(DetalheTransporteDto::new)
+                .toList();
     }
 
-    public Optional<Transporte> procurarPorId(Long id) {
-        return transporteRepository.findById(id);
+    // Retorna Optional de DTO e usa Fetch Join
+    public Optional<DetalheTransporteDto> procurarPorId(Long id) {
+        return transporteRepository.findByIdWithCaixa(id)
+            .map(DetalheTransporteDto::new);
+    }
+
+
+    public Optional<Transporte> procurarPorIdComCaixa(Long id) {
+        return transporteRepository.findByIdWithCaixa(id);
     }
 
     public void apagarPorId(Long id) {
@@ -141,4 +169,9 @@ public class TransporteService {
         }
 
     }
+
+    public List<Transporte> procurarPorIds(List<Long> ids) {
+        return transporteRepository.findAllByIdsWithCaixa(ids);
+}
+
 }

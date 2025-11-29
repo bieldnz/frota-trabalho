@@ -1,0 +1,876 @@
+type: collection.insomnia.rest/5.0
+name: Google Maps Api
+meta:
+  id: wrk_ac39d957d2704214b0a83f02e1ce8bbf
+  created: 1757735447337
+  modified: 1760818532111
+  description: ""
+collection:
+  - name: Marca
+    meta:
+      id: fld_deed04e37751482da5cfcf3261e02510
+      created: 1764385617254
+      modified: 1764385669753
+      sortKey: -1764385617404
+      description: ""
+    children:
+      - url: http://localhost:8083/marca
+        name: Criar Marca
+        meta:
+          id: req_7bb0f01be7f3450e954a2a5a99ce9b39
+          created: 1764385542773
+          modified: 1764385676716
+          isPrivate: false
+          description: ""
+          sortKey: -1764385664539
+        method: POST
+        body:
+          text: '{            "nome": "Marca A",            "pais": "Brasil"          }'
+          mimeType: application/json
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:8083/marca
+        name: Listar Marcas
+        meta:
+          id: req_7302678a578e41db93b646a0eded74a9
+          created: 1764385591109
+          modified: 1764385674955
+          isPrivate: false
+          description: ""
+          sortKey: -1764385664439
+        method: GET
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:8083/marca/1
+        name: Consultar Marca Por Id
+        meta:
+          id: req_9197429225e24e44a1dcf2da6ff65ec9
+          created: 1764385709274
+          modified: 1764385725101
+          isPrivate: false
+          description: ""
+          sortKey: -1764385709274
+        method: GET
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:8083/marca
+        name: Atualizar Marca
+        meta:
+          id: req_3c093d63912f4113b0a3c30b4674a726
+          created: 1764385741752
+          modified: 1764385790759
+          isPrivate: false
+          description: ""
+          sortKey: -1764385741752
+        method: PUT
+        body:
+          mimeType: application/json
+          text: |-
+            {
+            	"id": 1,
+            	"nome": "Marca B",
+            	"pais": "Argentina"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:8083/marca/1
+        name: Deletar Marca
+        meta:
+          id: req_83cf5a57746f43eabd71831ac5e17f2e
+          created: 1764385811372
+          modified: 1764385821906
+          isPrivate: false
+          description: ""
+          sortKey: -1764385811372
+        method: DELETE
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: Caminhão
+    meta:
+      id: fld_b243f609670149239b418587e438e1f5
+      created: 1764385837093
+      modified: 1764385847279
+      sortKey: -1764385837093
+      description: ""
+    children:
+      - url: http://localhost:8083/caminhao
+        name: Criar Caminhão
+        meta:
+          id: req_36bf613d60ee4c188ea47033f532c394
+          created: 1764385494531
+          modified: 1764385910487
+          isPrivate: false
+          description: ""
+          sortKey: -1764385873705
+        method: POST
+        body:
+          text: '{            "modelo": "Modelo X",            "placa":
+            "ABC1234",            "ano": 2023,            "cargaMaxima":
+            10000,            "marcaId": 1,            "comprimento":
+            10.5,            "largura": 2.5,            "altura":
+            3.0,            "kmAtual": 0          }'
+          mimeType: application/json
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:8083/caminhao
+        name: Listar Caminhões
+        meta:
+          id: req_273f8aab94834af596102b6dab946569
+          created: 1764385873505
+          modified: 1764385885986
+          isPrivate: false
+          description: ""
+          sortKey: -1764385873505
+        method: GET
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:8083/caminhao/1
+        name: Consultar Caminhão Por Id
+        meta:
+          id: req_e64bffed887c421299d97b1d8529a79c
+          created: 1764385903288
+          modified: 1764385928028
+          isPrivate: false
+          description: ""
+          sortKey: -1764385873605
+        method: GET
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:8083/caminhao/1
+        name: Atualizar Caminhão
+        meta:
+          id: req_e04b36660e7b4bffac3129787b4744cb
+          created: 1764385938902
+          modified: 1764385948495
+          isPrivate: false
+          description: ""
+          sortKey: -1764385938902
+        method: PUT
+        body:
+          text: '{            "id": 1,            "modelo": "Modelo
+            Y",            "placa": "XYZ5678",            "ano":
+            2024,            "cargaMaxima": 12000,            "marcaId":
+            1,            "comprimento": 11.0,            "largura":
+            2.6,            "altura": 3.2,            "kmAtual": 500          }'
+          mimeType: application/json
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:8083/caminhao/1
+        name: Deletar Caminhão
+        meta:
+          id: req_7c0bff57cd224fcba9954efa5039f87c
+          created: 1764385964187
+          modified: 1764385973612
+          isPrivate: false
+          description: ""
+          sortKey: -1764385964187
+        method: DELETE
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: Transporte
+    meta:
+      id: fld_6862521d225d418396c7b7e88b42f844
+      created: 1764386002391
+      modified: 1764386002391
+      sortKey: -1764386002391
+      description: ""
+    children:
+      - url: http://localhost:8083/transporte
+        name: Solicitar Frete
+        meta:
+          id: req_67736b7659b64632ae92e65beccf59de
+          created: 1764386010110
+          modified: 1764387689364
+          isPrivate: false
+          description: ""
+          sortKey: -1764386010110
+        method: POST
+        body:
+          text: '{            "produto": "Produto A",            "comprimento":
+            1.5,            "largura": 1.0,            "altura":
+            0.5,            "caixaId": 1,            "peso":
+            10.0,            "quantidade": 5,            "origem": "São
+            Paulo",            "destino": "Rio de
+            Janeiro",            "horarioRetirada":
+            "2023-10-01T10:00:00",            "statusPagamento":
+            "PAGO"          }'
+          mimeType: application/json
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:8083/transporte
+        name: Listar Fretes Solicitados
+        meta:
+          id: req_e05d2d1460d7488fa972d389d0847fe4
+          created: 1764387683360
+          modified: 1764387699458
+          isPrivate: false
+          description: ""
+          sortKey: -1764387683360
+        method: GET
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:8083/transporte/1
+        name: Listar Frete Por Id
+        meta:
+          id: req_1a620f26442849ffb072b6feab040fc7
+          created: 1764387712496
+          modified: 1764387723511
+          isPrivate: false
+          description: ""
+          sortKey: -1764387712496
+        method: GET
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:8083/transporte/1
+        name: Atualizar Frete
+        meta:
+          id: req_32ec518523b64d02a2729cc0885e1b26
+          created: 1764387748521
+          modified: 1764387758863
+          isPrivate: false
+          description: ""
+          sortKey: -1764387748521
+        method: PUT
+        body:
+          text: '{            "id": 1,            "produto": "Produto
+            B",            "comprimento": 2.0,            "largura":
+            1.5,            "altura": 0.8,            "caixaId":
+            2,            "peso": 15.0,            "quantidade":
+            10,            "origem": "Curitiba",            "destino":
+            "Florianópolis",            "horarioRetirada":
+            "2023-10-02T14:00:00",            "statusPagamento":
+            "PENDENTE"          }'
+          mimeType: application/json
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:8083/transporte/1/status/EM_PROCESSAMENTO
+        name: Atualizar Status do Frete
+        meta:
+          id: req_8073ded313304aca9cc110ca36bfda2f
+          created: 1764387804287
+          modified: 1764387819389
+          isPrivate: false
+          description: ""
+          sortKey: -1764387804287
+        method: PUT
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:8083/transporte/1
+        name: Deletar Solicitação de Frete
+        meta:
+          id: req_05b582dcb5e94141b09bd385c5fd7be1
+          created: 1764387837823
+          modified: 1764387847873
+          isPrivate: false
+          description: ""
+          sortKey: -1764387837823
+        method: DELETE
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: Caixa
+    meta:
+      id: fld_f4c502b4d8c94f79a1933e1fc755f965
+      created: 1764386038529
+      modified: 1764386038529
+      sortKey: -1764386038529
+      description: ""
+    children:
+      - url: http://localhost:8083/caixa
+        name: Criar Caixa
+        meta:
+          id: req_1e810ab5f7f44a609418b583abbecec3
+          created: 1764390520235
+          modified: 1764390564086
+          isPrivate: false
+          description: ""
+          sortKey: -1764390520235
+        method: POST
+        body:
+          text: '{"material":"Madeira","capacidadeKg":50.0,"disponivel":true,"altura":10.0,"largura":5.0,"profundidade":5.0}'
+          mimeType: application/json
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:8080/caixa/1
+        name: Atualizar Caixa
+        meta:
+          id: req_2f5b6c7faa004521ac5336c9a9bf9a80
+          created: 1764390593661
+          modified: 1764390601009
+          isPrivate: false
+          description: ""
+          sortKey: -1764390593661
+        method: PUT
+        body:
+          text: '{"material":"Plástico","capacidadeKg":60.0,"disponivel":false,"altura":12.0,"largura":6.0,"profundidade":6.0}'
+          mimeType: application/json
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:8080/caixa/capacidade
+        name: Consultar Caixas Por Capacidade
+        meta:
+          id: req_60b903be6218410d90ee7fa0f94c4003
+          created: 1764390612652
+          modified: 1764390632901
+          isPrivate: false
+          description: ""
+          sortKey: -1764390612652
+        method: GET
+        parameters:
+          - name: capacidade
+            value: "100.0"
+            disabled: false
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:8080/caixa
+        name: Consultar Caixas
+        meta:
+          id: req_b69a0d55fbf94c3496eab76716c05a7d
+          created: 1764390658513
+          modified: 1764390668752
+          isPrivate: false
+          description: ""
+          sortKey: -1764390658513
+        method: GET
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:8080/caixa/1
+        name: Consultar Caixa Por Id
+        meta:
+          id: req_cbb5668c332b446aa9fd8e41f5ebf6ce
+          created: 1764390686046
+          modified: 1764390699662
+          isPrivate: false
+          description: ""
+          sortKey: -1764390686046
+        method: GET
+        parameters:
+          - name: id
+            value: "1"
+            disabled: false
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: Viagem
+    meta:
+      id: fld_89f33e08c76d48718b4f537e3ffefd65
+      created: 1764387874889
+      modified: 1764387874889
+      sortKey: -1764387874889
+      description: ""
+    children:
+      - url: http://localhost:8083/viagem
+        name: Criar Nova Viagem
+        meta:
+          id: req_9682de49d39246429c216a08d3726861
+          created: 1764387885610
+          modified: 1764387897007
+          isPrivate: false
+          description: ""
+          sortKey: -1764387885610
+        method: POST
+        body:
+          text: '{            "caminhaoId": 1,            "transportesIds": [1,
+            2],            "kmSaida": 1000          }'
+          mimeType: application/json
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:8083/viagem
+        name: Listar Viagens
+        meta:
+          id: req_2823591bb31e4eeb8ddb60539a3bfd4a
+          created: 1764387911797
+          modified: 1764387919230
+          isPrivate: false
+          description: ""
+          sortKey: -1764387911797
+        method: GET
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:8083/viagem/1
+        name: Consultar Viagem Por Id
+        meta:
+          id: req_889c6a24164f4158ae792e8b61e39cb1
+          created: 1764387939224
+          modified: 1764387948824
+          isPrivate: false
+          description: ""
+          sortKey: -1764387939224
+        method: GET
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:8083/viagem/1/finalizar
+        name: Finalizar Viagem
+        meta:
+          id: req_eb04bb15fa17413fa1714ac717ea8536
+          created: 1764387962625
+          modified: 1764387970605
+          isPrivate: false
+          description: ""
+          sortKey: -1764387962625
+        method: PUT
+        body:
+          text: '{            "kmChegada": 1200,            "totalCombustivelLitros":
+            50          }'
+          mimeType: application/json
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: Planejamento
+    meta:
+      id: fld_4d5eec3c3ccc4e2cbe09feb12e17dc5b
+      created: 1764387987300
+      modified: 1764387987300
+      sortKey: -1764387987300
+      description: ""
+    children:
+      - url: http://localhost:8083/planejamento/sugerir-caminhao
+        name: Sugerir Caminhão Para Frete
+        meta:
+          id: req_882c059510454496868d5d97e2f672da
+          created: 1764388005716
+          modified: 1764388029700
+          isPrivate: false
+          description: ""
+          sortKey: -1764388005716
+        method: POST
+        body:
+          text: "[1, 2, 3]"
+          mimeType: application/json
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: Motorista
+    meta:
+      id: fld_390d62afc15649a682084e7fd97f2736
+      created: 1764388061042
+      modified: 1764388061042
+      sortKey: -1764388061042
+      description: ""
+    children:
+      - url: http://localhost:8083/motorista/rastrear
+        name: Atualizar Localização do Motorista
+        meta:
+          id: req_5c04b3e604164d5a9ed9ac3d89925e30
+          created: 1764388070220
+          modified: 1764388097893
+          isPrivate: false
+          description: ""
+          sortKey: -1764388070220
+        method: POST
+        body:
+          text: '{            "motoristaId": 1,            "latitude":
+            -23.5505,            "longitude": -46.6333          }'
+          mimeType: application/json
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:8083/motorista/entregar/1
+        name: Finalizar Entrega
+        meta:
+          id: req_91c2ee8ced7d4fbd8d5421b3b5eb0f79
+          created: 1764388112928
+          modified: 1764388146454
+          isPrivate: false
+          description: ""
+          sortKey: -1764388112928
+        method: PUT
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:8083/motorista/1
+        name: Consultar Motorista Por Id
+        meta:
+          id: req_2191bb39357e43c89c4b95cb1f7fc90f
+          created: 1764388174737
+          modified: 1764388185837
+          isPrivate: false
+          description: ""
+          sortKey: -1764388174737
+        method: GET
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: Manutenção
+    meta:
+      id: fld_4bb4f05d8f6847c9996ebb195f4b1859
+      created: 1764388206952
+      modified: 1764388206952
+      sortKey: -1764388206952
+      description: ""
+    children:
+      - url: http://localhost:8083/manutencao
+        name: Registra Manutenção
+        meta:
+          id: req_20e36059d51a46489a9ae5f6d30011f5
+          created: 1764388217012
+          modified: 1764388228389
+          isPrivate: false
+          description: ""
+          sortKey: -1764388217012
+        method: POST
+        body:
+          text: '{            "caminhaoId": 1,            "tipoServico":
+            "OLEO_FILTROS_PASTILHAS",            "kmRealizacao":
+            10000,            "observacao": "Troca de óleo e
+            filtros",            "custo": 500.0          }'
+          mimeType: application/json
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:8083/manutencao
+        name: Listar Manutenções
+        meta:
+          id: req_ae4d10e9a62c4ba7831fec8baae33f46
+          created: 1764388246197
+          modified: 1764388255778
+          isPrivate: false
+          description: ""
+          sortKey: -1764388246197
+        method: GET
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:8083/manutencao/1
+        name: Consultar Manutenção Por Id
+        meta:
+          id: req_ca9ef7b880364d3fa81acf2e6c3d03ae
+          created: 1764388280406
+          modified: 1764388291995
+          isPrivate: false
+          description: ""
+          sortKey: -1764388280406
+        method: GET
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:8083/manutencao/alerta/1
+        name: Consultar Alerta de Manutenção de Caminhão
+        meta:
+          id: req_a178019a22cf48e5b49eb4317c50c8a6
+          created: 1764388305550
+          modified: 1764388325231
+          isPrivate: false
+          description: ""
+          sortKey: -1764388305550
+        method: GET
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+  - name: Avaliação
+    meta:
+      id: fld_08e9aa54552e40fabaa16d297657f20a
+      created: 1764388342227
+      modified: 1764388342227
+      sortKey: -1764388342227
+      description: ""
+    children:
+      - url: http://localhost:8083/avaliacao
+        name: Registrar Avaliação
+        meta:
+          id: req_5054c4da202746e6984d42a126192c86
+          created: 1764388350067
+          modified: 1764388359955
+          isPrivate: false
+          description: ""
+          sortKey: -1764388350067
+        method: POST
+        body:
+          text: '{            "transporteId": 1,            "nota":
+            5,            "comentario": "Entrega excelente!"          }'
+          mimeType: application/json
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:8083/avaliacao
+        name: Listar Avaliações
+        meta:
+          id: req_39c51639ed6f4e5fafde63a00040c1f1
+          created: 1764388370281
+          modified: 1764388385131
+          isPrivate: false
+          description: ""
+          sortKey: -1764388370281
+        method: GET
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: http://localhost:8083/avaliacao/1
+        name: Listar Avaliação Por Id
+        meta:
+          id: req_98abc6ef815e43beae0e418224175861
+          created: 1764388406024
+          modified: 1764388416301
+          isPrivate: false
+          description: ""
+          sortKey: -1764388406024
+        method: GET
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_63ae3ed027b2dea04317ccb14ae0891672eb1c87
+    created: 1757735447346
+    modified: 1757735447346
+environments:
+  name: Base Environment
+  meta:
+    id: env_63ae3ed027b2dea04317ccb14ae0891672eb1c87
+    created: 1757735447342
+    modified: 1757735447342
+    isPrivate: false

@@ -34,15 +34,13 @@ public class ViagemService {
         if (dto.kmSaida() < caminhao.getKmAtual()) {
             throw new IllegalArgumentException("A KM de saída não pode ser menor que a KM atual do caminhão (" + caminhao.getKmAtual() + ").");
         }
-        
-        List<Transporte> transportes = transporteService.procurarTodos().stream()
-                .filter(t -> dto.transportesIds().contains(t.getId()))
-                .toList();
 
+        List<Transporte> transportes = transporteService.procurarPorIds(dto.transportesIds());
         if (transportes.size() != dto.transportesIds().size()) {
-            throw new EntityNotFoundException("Um ou mais Transportes não foram encontrados.");
+              throw new EntityNotFoundException("Um ou mais Transportes não foram encontrados.");
         }
-        
+                
+       
         // Verifica se todos os transportes estão em status SOLICITADO e atualiza para COLETA
         for (Transporte t : transportes) {
             if (t.getStatus() != StatusEntrega.SOLICITADO) {

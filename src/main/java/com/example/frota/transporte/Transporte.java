@@ -1,6 +1,8 @@
 package com.example.frota.transporte;
 
 import com.example.frota.caixa.Caixa;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -34,6 +36,7 @@ public class Transporte {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "caixa_id", referencedColumnName = "caixa_id")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     Caixa caixa;
 
 	String produto;

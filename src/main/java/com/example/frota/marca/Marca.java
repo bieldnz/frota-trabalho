@@ -1,5 +1,7 @@
 package com.example.frota.marca;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -20,6 +22,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of ="id")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Marca {
 	
 	@Id

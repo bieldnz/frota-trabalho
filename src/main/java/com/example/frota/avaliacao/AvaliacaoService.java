@@ -22,14 +22,14 @@ public class AvaliacaoService {
     private TransporteService transporteService;
 
     public Avaliacao registrarAvaliacao(DadosRegistroAvaliacao dto) {
-        Transporte transporte = transporteService.procurarPorId(dto.transporteId())
-            .orElseThrow(() -> new EntityNotFoundException("Transporte não encontrado com ID: " + dto.transporteId()));
-            
-        // Verificar se a entrega foi finalizada (ENTREGUE)
-        if (transporte.getStatus() != StatusEntrega.ENTREGUE) {
-            throw new IllegalArgumentException("A avaliação só pode ser registrada após a entrega (status: ENTREGUE). Status atual: " + transporte.getStatus());
-        }
         
+        Transporte transporte = transporteService.procurarPorIdComCaixa(dto.transporteId()) 
+        .orElseThrow(() -> new EntityNotFoundException("Transporte não encontrado com ID: " + dto.transporteId()));
+            
+    if (transporte.getStatus() != StatusEntrega.ENTREGUE) {
+        throw new IllegalArgumentException("A avaliação só pode ser registrada após a entrega (status: ENTREGUE). Status atual: " + transporte.getStatus());
+    }
+      
         //  Verificar se já existe uma avaliação
         if (avaliacaoRepository.findByTransporteId(dto.transporteId()).isPresent()) {
             throw new IllegalArgumentException("Este transporte já possui uma avaliação registrada.");

@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.frota.transporte.Transporte;
+import com.example.frota.transporte.DetalheTransporteDto;
 
-import jakarta.transaction.Transactional;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 
 @RestController
@@ -22,35 +22,37 @@ public class MotoristaController {
     @Autowired
     private MotoristaService motoristaService;
 
-    // Endpoint do App do motorista para enviar coordenadas
     @PostMapping("/rastrear")
-    @Transactional
+ 
     public ResponseEntity<?> atualizarRastreamento(@RequestBody @Valid DadosRastreamento dto) {
         try {
-            Motorista motorista = motoristaService.atualizarRastreamento(dto);
-            return ResponseEntity.ok(motorista);
+            DetalheMotoristaDto motoristaDto = motoristaService.atualizarRastreamento(dto);
+            return ResponseEntity.ok(motoristaDto);
+        } catch (EntityNotFoundException e) {
+             return ResponseEntity.notFound().build();
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
-    //  Endpoint do App do motorista para sinalizar entrega
     @PutMapping("/entregar/{transporteId}")
-    @Transactional
-    public ResponseEntity<?> sinalizarEntrega(@PathVariable Long transporteId) {
+     public ResponseEntity<DetalheTransporteDto> sinalizarEntrega(@PathVariable Long transporteId) {
         try {
-            Transporte transporte = motoristaService.sinalizarEntrega(transporteId);
-            return ResponseEntity.ok(transporte);
+            DetalheTransporteDto transporteDto = motoristaService.sinalizarEntrega(transporteId);
+            return ResponseEntity.ok(transporteDto);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+           return ResponseEntity.badRequest().body(null); 
         }
     }
-    
+
     @GetMapping("/{id}")
-    public ResponseEntity<Motorista> buscarPorId(@PathVariable Long id) {
-        return motoristaService.procurarPorId(id)
-            .map(ResponseEntity::ok)
-            .orElseGet(() -> ResponseEntity.notFound().build());
-    }
+public ResponseEntity<DetalheMotoristaDto> buscarPorId(@PathVariable Long id) {
+    return motoristaService.procurarPorId(id)
+        .map(DetalheMotoristaDto::new)
+        .map(ResponseEntity::ok)
+        .orElseGet(() -> ResponseEntity.notFound().build());
+}
 
 }

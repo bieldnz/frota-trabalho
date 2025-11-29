@@ -18,6 +18,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "avaliacao")
@@ -34,6 +35,7 @@ public class Avaliacao {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "transporte_id", unique = true)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Transporte transporte;
    
     private int nota;
