@@ -1,8 +1,9 @@
 package com.example.frota.manutencao;
 
-import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
+import java.math.BigDecimal;
 
 public record DadosRegistroManutencao(
     @NotNull(message = "O ID do caminhão é obrigatório")
@@ -12,12 +13,12 @@ public record DadosRegistroManutencao(
     TipoManutencao tipoServico,
     
     @NotNull(message = "A KM de realização é obrigatória")
-    @Min(value = 0, message = "A KM deve ser um valor positivo")
+    @PositiveOrZero(message = "A KM deve ser zero ou positiva")
     Double kmRealizacao,
 
     String observacao,
     
     @NotNull(message = "O custo é obrigatório")
-    @Positive(message = "O custo deve ser positivo")
-    Double custo
+    @DecimalMin(value = "0.01", message = "O custo deve ser um valor monetário positivo")
+    BigDecimal custo
 ) {}

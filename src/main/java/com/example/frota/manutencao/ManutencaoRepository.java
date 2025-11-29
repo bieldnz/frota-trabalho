@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -16,4 +17,11 @@ public interface ManutencaoRepository extends JpaRepository<Manutencao, Long> {
         @Param("caminhaoId") Long caminhaoId, 
         @Param("tipoServico") TipoManutencao tipoServico
     );
+
+    @Query("SELECT m FROM Manutencao m JOIN FETCH m.caminhao WHERE m.id = :id")
+    Optional<Manutencao> findByIdWithCaminhao(@Param("id") Long id);
+
+    @Query("SELECT m FROM Manutencao m JOIN FETCH m.caminhao")
+    List<Manutencao> findAllWithCaminhao();
+
 }

@@ -1,5 +1,6 @@
 package com.example.frota.manutencao;
 
+import java.math.BigDecimal; // Novo import
 import java.time.LocalDateTime;
 
 import com.example.frota.caminhao.Caminhao;
@@ -7,7 +8,7 @@ import com.example.frota.caminhao.Caminhao;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+import jakarta.persistence.Enumerated;  
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -20,6 +21,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 
 @Entity
 @Table(name = "manutencao")
@@ -50,13 +52,13 @@ public class Manutencao {
 
     private String observacao;
     
-    private double custo;
+    private BigDecimal custo; 
 
     public Manutencao(DadosRegistroManutencao dto, Caminhao caminhao) {
         this.caminhao = caminhao;
         this.tipoServico = dto.tipoServico();
         this.kmRealizacao = dto.kmRealizacao();
         this.observacao = dto.observacao();
-        this.custo = dto.custo();
-    }
+        this.custo = dto.custo(); 
+}
 }

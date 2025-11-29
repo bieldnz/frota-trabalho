@@ -23,31 +23,29 @@ public class ManutencaoController {
     @Autowired
     private ManutencaoService manutencaoService;
 
-    // Registrar nova manutenção
-    @PostMapping
-    @Transactional
-    public ResponseEntity<?> registrarManutencao(@RequestBody @Valid DadosRegistroManutencao dto) {
+   @PostMapping
+      public ResponseEntity<DadosDetalhamentoManutencao> registrarManutencao(@RequestBody @Valid DadosRegistroManutencao dto) {
         try {
-            Manutencao salva = manutencaoService.registrar(dto);
+            DadosDetalhamentoManutencao responseDto = manutencaoService.registrar(dto);
+            
             URI location = ServletUriComponentsBuilder
 					.fromCurrentRequest()
 					.path("/{id}")
-					.buildAndExpand(salva.getId())
+					.buildAndExpand(responseDto.id()) 
 					.toUri();
-			return ResponseEntity.created(location).body(salva);
+			return ResponseEntity.created(location).body(responseDto);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body(null); 
         }
     }
 
-    // GET /manutencao - Listar todas as manutenções
     @GetMapping
-    public ResponseEntity<List<Manutencao>> listarTodos() {
+    public ResponseEntity<List<DadosDetalhamentoManutencao>> listarTodos() {
         return ResponseEntity.ok(manutencaoService.procurarTodos());
     }
 
-      @GetMapping("/{id}")
-    public ResponseEntity<Manutencao> buscarPorId(@PathVariable Long id) {
+    @GetMapping("/{id}")
+    public ResponseEntity<DadosDetalhamentoManutencao> buscarPorId(@PathVariable Long id) {
         return manutencaoService.procurarPorId(id)
             .map(ResponseEntity::ok)
             .orElseGet(() -> ResponseEntity.notFound().build());

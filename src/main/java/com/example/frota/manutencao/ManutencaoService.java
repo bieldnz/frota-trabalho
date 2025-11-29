@@ -10,6 +10,7 @@ import com.example.frota.caminhao.Caminhao;
 import com.example.frota.caminhao.CaminhaoService;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 
 @Service
 public class ManutencaoService {
@@ -23,7 +24,8 @@ public class ManutencaoService {
     @Autowired
     private CaminhaoService caminhaoService;
 
-    public Manutencao registrar(DadosRegistroManutencao dto) {
+    @Transactional 
+    public DadosDetalhamentoManutencao registrar(DadosRegistroManutencao dto) {
         Caminhao caminhao = caminhaoService.procurarPorId(dto.caminhaoId())
                 .orElseThrow(() -> new EntityNotFoundException("Caminhão não encontrado com ID: " + dto.caminhaoId()));
         
@@ -32,15 +34,20 @@ public class ManutencaoService {
         }
 
         Manutencao novaManutencao = new Manutencao(dto, caminhao);
-        return manutencaoRepository.save(novaManutencao);
+        Manutencao salva = manutencaoRepository.save(novaManutencao);
+        return new DadosDetalhamentoManutencao(salva); 
     }
     
-    public List<Manutencao> procurarTodos() {
-        return manutencaoRepository.findAll();
+ 
+    public List<DadosDetalhamentoManutencao> procurarTodos() {
+        return manutencaoRepository.findAllWithCaminhao().stream()
+                .map(DadosDetalhamentoManutencao::new)
+                .toList();
     }
     
-    public Optional<Manutencao> procurarPorId(Long id) {
-        return manutencaoRepository.findById(id);
+    public Optional<DadosDetalhamentoManutencao> procurarPorId(Long id) {
+        return manutencaoRepository.findByIdWithCaminhao(id)
+                .map(DadosDetalhamentoManutencao::new);
     }
 
     // Lógica verificar alertas
