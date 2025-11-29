@@ -50,5 +50,5 @@ public class Caixa {
                produtoAltura <= altura &&
                produtoPeso <= capacidadeKg;
     }
-    
+
 }
