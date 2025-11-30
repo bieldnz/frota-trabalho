@@ -39,11 +39,12 @@ services:
       # Google Maps API Key from .env file
       API_KEY: ${API_KEY}
       # Optional: tune JVM
-      JAVA_OPTS: -XX:MaxRAMPercentage=75.0 -XX:+UseContainerSupport
+      JAVA_OPTS: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005 -XX:MaxRAMPercentage=75.0 -XX:+UseContainerSupport
       # Optional: override server port if needed
       # SERVER_PORT: 8083
     ports:
       - "8083:8083"
+      - "5005:5005"
     env_file:
       - .env
     # If you prefer dev-mode with volume mounts, uncomment the line below and rebuild as needed
