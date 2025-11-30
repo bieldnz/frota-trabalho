@@ -419,16 +419,30 @@ GET /motorista/contadores/disponiveis # Disponibilidade em tempo real
 - [ ] **Notificações** WhatsApp/SMS em tempo real
 - [ ] **Dashboard** administrativo com métricas
 - [ ] **API Mobile** para motoristas  
-- [ ] **Geolocalização** em tempo real
+- [ ] **Geolocalização** em tempo real (base já implementada)
 - [ ] **Relatórios** avançados de performance
 - [ ] **Integração** com outros mapas (Waze, Here)
 - [ ] **Machine Learning** para previsão de demanda
+- [ ] **Otimização de rotas** automática
 
 ### 🛡️ Melhorias de Segurança  
 - [ ] **JWT Authentication**
 - [ ] **Rate Limiting**
 - [ ] **HTTPS** obrigatório
 - [ ] **Audit Log** completo
+- [ ] **Criptografia** de dados sensíveis
+
+### 📱 Features Mobile
+- [ ] **App Motorista** (Android/iOS)
+- [ ] **App Cliente** para acompanhamento  
+- [ ] **Push notifications** em tempo real
+- [ ] **Assinatura digital** de entregas
+
+### 🚀 Performance e Escalabilidade
+- [ ] **Cache Redis** para consultas frequentes
+- [ ] **Message Queue** para processamento assíncrono
+- [ ] **Load Balancer** para alta disponibilidade
+- [ ] **Database replication** para leitura
 
 ## 📞 Suporte
 
