@@ -75,7 +75,7 @@ public class Transporte {
     String statusPagamento;
 
 
-    public Transporte(CadastroTransporte dto, Caixa caixa) {
+    public Transporte(CadastroTransporte dto, Caixa caixa, Cliente cliente, Transportadora transportadora) {
         this.comprimento = dto.comprimento();
 		this.produto = dto.produto();
 		this.largura = dto.largura();
@@ -83,10 +83,10 @@ public class Transporte {
 		this.peso = dto.peso();
 		this.quantidade = dto.quantidade();
 		this.caixa = caixa;
+		this.cliente = cliente;
+		this.transportadora = transportadora;
 		this.origem = dto.origem();
 		this.destino = dto.destino();
-        
-        // Novos campos
         this.horarioRetirada = dto.horarioRetirada();
         this.statusPagamento = dto.statusPagamento();
         this.statusGeral = StatusEntrega.SOLICITADO;
@@ -95,9 +95,11 @@ public class Transporte {
     }
     
     // Método de atualização de dados, exceto o status, que é atualizado separadamente.
-    public void atualizar(CadastroTransporte dto, Caixa caixa, double valorFrete) {
+    public void atualizar(CadastroTransporte dto, Caixa caixa, Cliente cliente, Transportadora transportadora, double valorFrete) {
         this.produto = dto.produto();
         this.caixa = caixa;
+        this.cliente = cliente;
+        this.transportadora = transportadora;
         this.comprimento = dto.comprimento();
         this.largura = dto.largura();
         this.altura = dto.altura();
@@ -130,8 +132,11 @@ public class Transporte {
      * Verifica se ambos os status são ENTREGUE para finalizar automaticamente
      */
     private void verificarFinalizacao() {
-        if (this.statusMotorista == StatusEntrega.ENTREGUE && 
-            this.statusCliente == StatusEntrega.ENTREGUE) {
+        // Garantir que os status nunca sejam null
+        StatusEntrega statusMot = this.statusMotorista != null ? this.statusMotorista : StatusEntrega.SOLICITADO;
+        StatusEntrega statusCli = this.statusCliente != null ? this.statusCliente : StatusEntrega.SOLICITADO;
+        
+        if (statusMot == StatusEntrega.ENTREGUE && statusCli == StatusEntrega.ENTREGUE) {
             this.statusGeral = StatusEntrega.FINALIZADO;
         } else {
             // Atualiza status geral com base no menor status entre motorista e cliente
@@ -143,10 +148,14 @@ public class Transporte {
      * Retorna o status mínimo entre motorista e cliente
      */
     private StatusEntrega obterStatusMinimo() {
-        if (statusMotorista.ordinal() <= statusCliente.ordinal()) {
-            return statusMotorista;
+        // Garantir que os status nunca sejam null
+        StatusEntrega statusMot = this.statusMotorista != null ? this.statusMotorista : StatusEntrega.SOLICITADO;
+        StatusEntrega statusCli = this.statusCliente != null ? this.statusCliente : StatusEntrega.SOLICITADO;
+        
+        if (statusMot.ordinal() <= statusCli.ordinal()) {
+            return statusMot;
         }
-        return statusCliente;
+        return statusCli;
     }
     
     /**

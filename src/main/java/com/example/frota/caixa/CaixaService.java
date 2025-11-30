@@ -75,7 +75,7 @@ public class CaixaService {
 
     public Double calcularPesoCubico(Caixa caixa) {
         Double volume = calcularVolume(caixa);
-        return volume / 6000.0; // Fator de cubagem padrão
+        return volume / 600.0; // Fator de cubagem padrão
     }
 
     public Double calcularPesoTaxavel(Caixa caixa) {
@@ -99,7 +99,7 @@ public class CaixaService {
         return caixaRepository.findByPesoBetween(minPeso, maxPeso);
     }
 
-    // Métodos de compatibilidade com código existente
+    
     public List<Caixa> procurarTodos() {
         return caixaRepository.findAll();
     }

@@ -20,6 +20,8 @@ services:
       interval: 5s
       timeout: 3s
       retries: 20
+    env_file:
+      - .env
 
   app:
     build:
@@ -34,12 +36,16 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/frota?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true
       SPRING_DATASOURCE_USERNAME: frota
       SPRING_DATASOURCE_PASSWORD: frota
+      # Google Maps API Key from .env file
+      API_KEY: ${API_KEY}
       # Optional: tune JVM
       JAVA_OPTS: -XX:MaxRAMPercentage=75.0 -XX:+UseContainerSupport
       # Optional: override server port if needed
       # SERVER_PORT: 8083
     ports:
       - "8083:8083"
+    env_file:
+      - .env
     # If you prefer dev-mode with volume mounts, uncomment the line below and rebuild as needed
     # volumes:
     #   - ./:/workspace

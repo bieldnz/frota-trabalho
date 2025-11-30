@@ -42,9 +42,9 @@ public record DetalheTransporteDto(
             transporte.getOrigem(),
             transporte.getDestino(),
             transporte.getValorFrete(),
-            transporte.getStatusGeral().toString(),
-            transporte.getStatusMotorista().toString(),
-            transporte.getStatusCliente().toString(),
+            transporte.getStatusGeral() != null ? transporte.getStatusGeral().toString() : "PENDENTE",
+            transporte.getStatusMotorista() != null ? transporte.getStatusMotorista().toString() : "PENDENTE",
+            transporte.getStatusCliente() != null ? transporte.getStatusCliente().toString() : "PENDENTE",
             transporte.getHorarioRetirada(),
             transporte.getStatusPagamento()
         );

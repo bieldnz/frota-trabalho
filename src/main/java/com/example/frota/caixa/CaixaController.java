@@ -67,6 +67,8 @@ public class CaixaController {
     public ResponseEntity<Caixa> atualizarCaixa(@PathVariable Long id, @RequestBody Caixa caixaRequest) {
         Caixa caixaExistente = caixaRepository.findById(id).orElse(null);
         if (caixaExistente != null) {
+            // Manter o ID da caixa existente e atualizar os campos
+            caixaRequest.setId(id);
             Caixa caixaAtualizada = caixaRepository.save(caixaRequest);
             return ResponseEntity.ok(caixaAtualizada);
         } else {

@@ -31,15 +31,6 @@ Um sistema completo para gestão de transporte e logística, desenvolvido em Spr
 - **Viagens** otimizadas com motorista obrigatório
 - **Sistema de avaliações** pós-entrega
 
-## 🛠️ Tecnologias
-
-- **Spring Boot** 3.5.5
-- **Java** 21
-- **MySQL** 8.4
-- **JPA/Hibernate** 6.6.26
-- **Bean Validation**
-- **Lombok**
-- **Google Maps API**
 
 ## 🚀 Quick Start
 
@@ -62,22 +53,33 @@ cd frota-trabalho
 CREATE DATABASE frota CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ```
 
-3. **Configure application.properties**
+3. **Configure as variáveis de ambiente**
+```bash
+# Copie o arquivo de exemplo
+cp .env.example .env
+
+# Edite o arquivo .env e configure sua Google Maps API Key
+# API_KEY=sua_api_key_google_maps_aqui
+```
+
+4. **Configure application.properties (desenvolvimento local)**
 ```properties
 spring.datasource.url=jdbc:mysql://localhost:3307/frota
 spring.datasource.username=root
 spring.datasource.password=sua_senha
-google.maps.api.key=sua_api_key_google_maps
+google.maps.api.key=${API_KEY}
 ```
 
-4. **Execute a aplicação**
+5. **Execute a aplicação**
 ```bash
-# Desenvolvimento
+# Desenvolvimento local (requer MySQL local)
 ./mvnw spring-boot:run
 
-# Produção com Docker
-docker-compose up
+# Produção com Docker (recomendado)
+docker-compose up --build
 ```
+
+**⚠️ Importante**: Obtenha sua Google Maps API Key em [Google Cloud Console](https://developers.google.com/maps/documentation/distance-matrix/get-api-key)
 
 ## 📱 Testando a API
 
@@ -258,15 +260,37 @@ services:
       - "5005:5005"  # Debug
     environment:
       - SPRING_PROFILES_ACTIVE=docker
+      - API_KEY=${API_KEY}  # Carregado do arquivo .env
+    env_file:
+      - .env  # Carrega variáveis do arquivo .env
       
   db:
     image: mysql:8.4
     ports:
       - "3307:3306"
     environment:
-      MYSQL_ROOT_PASSWORD: frota123
+      MYSQL_ROOT_PASSWORD: cco123
       MYSQL_DATABASE: frota
+    env_file:
+      - .env
 ```
+
+### Variáveis de Ambiente (.env)
+```env
+# Google Maps API Key (OBRIGATÓRIO)
+API_KEY=YOUR_GOOGLE_MAPS_API_KEY_HERE
+
+# Database Configuration
+MYSQL_ROOT_PASSWORD=cco123
+MYSQL_DATABASE=frota
+MYSQL_USER=frota
+MYSQL_PASSWORD=frota
+
+# Spring Boot Configuration  
+SERVER_PORT=8083
+```
+
+**🔒 Segurança**: O arquivo `.env` está no `.gitignore` para proteger suas credenciais.
 
 ### Debug no VS Code
 ```json
@@ -295,21 +319,8 @@ Garante segurança nas entregas através de confirmação dupla:
 2. **Cliente** confirma recebimento → `statusCliente = ENTREGUE`  
 3. **Sistema** automaticamente → `statusGeral = FINALIZADO`
 
-### 💡 Cálculo de Frete Inteligente
-```java
-// Algoritmo corrigido com fatores realistas
-peso_considerado = max(peso_real, peso_cubado)
-peso_cubado = (comp × larg × alt) × fator_cubagem // 0.3 (corrigido de 300!)
-
-frete_peso = (peso × valor_kg) + (km × valor_km) + pedágio
-frete_caixa = (qtd × valor_caixa) + (km × valor_km) + pedágio
-
-frete_final = max(frete_peso, frete_caixa)
-// Resultado formatado com 2 decimais usando BigDecimal
-```
 
 ### 🔧 Sistema de Tratamento de Erros
-Mais de **15 exceções customizadas** para controle completo:
 ```java
 // Motorista
 CnhJaExisteException
@@ -416,10 +427,8 @@ GET /motorista/contadores/disponiveis # Disponibilidade em tempo real
 ## 📝 Roadmap
 
 ### 🔄 Próximas Versões
-- [ ] **Notificações** WhatsApp/SMS em tempo real
+
 - [ ] **Dashboard** administrativo com métricas
-- [ ] **API Mobile** para motoristas  
-- [ ] **Geolocalização** em tempo real (base já implementada)
 - [ ] **Relatórios** avançados de performance
 - [ ] **Integração** com outros mapas (Waze, Here)
 - [ ] **Machine Learning** para previsão de demanda
@@ -432,12 +441,6 @@ GET /motorista/contadores/disponiveis # Disponibilidade em tempo real
 - [ ] **Audit Log** completo
 - [ ] **Criptografia** de dados sensíveis
 
-### 📱 Features Mobile
-- [ ] **App Motorista** (Android/iOS)
-- [ ] **App Cliente** para acompanhamento  
-- [ ] **Push notifications** em tempo real
-- [ ] **Assinatura digital** de entregas
-
 ### 🚀 Performance e Escalabilidade
 - [ ] **Cache Redis** para consultas frequentes
 - [ ] **Message Queue** para processamento assíncrono
@@ -446,8 +449,6 @@ GET /motorista/contadores/disponiveis # Disponibilidade em tempo real
 
 ## 📞 Suporte
 
-- 📧 **Email**: suporte@frota.com
-- 📱 **WhatsApp**: (11) 99999-9999
 - 🐛 **Issues**: [GitHub Issues](https://github.com/bieldnz/frota-trabalho/issues)
 - 📖 **Wiki**: [Documentação Completa](./API_DOCUMENTATION.md)
 

@@ -83,15 +83,11 @@ public class TransporteService {
         if (dto.id() != null) {
             Transporte existente = transporteRepository.findById(dto.id())
                     .orElseThrow(() -> new EntityNotFoundException("Transporte não encontrado com ID: " + dto.id()));
-            existente.atualizar(dto, caixa, valorFrete);
-            existente.setCliente(cliente);
-            existente.setTransportadora(transportadora);
+            existente.atualizar(dto, caixa, cliente, transportadora, valorFrete);
             salvo = transporteRepository.save(existente);
         } else {
-            Transporte novo = new Transporte(dto, caixa);
+            Transporte novo = new Transporte(dto, caixa, cliente, transportadora);
             novo.setValorFrete(valorFrete);
-            novo.setCliente(cliente);
-            novo.setTransportadora(transportadora);
             salvo = transporteRepository.save(novo);
         }
         

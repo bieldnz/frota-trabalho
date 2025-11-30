@@ -10,16 +10,16 @@ import org.springframework.data.repository.query.Param;
 
 public interface TransporteRepository extends JpaRepository<Transporte, Long> {
 
-    @Query("SELECT t FROM Transporte t JOIN FETCH t.caixa WHERE t.id = :id")
+    @Query("SELECT t FROM Transporte t JOIN FETCH t.caixa LEFT JOIN FETCH t.cliente LEFT JOIN FETCH t.transportadora WHERE t.id = :id")
     Optional<Transporte> findByIdWithCaixa(@Param("id") Long id);
 
-    @Query("SELECT t FROM Transporte t JOIN FETCH t.caixa")
+    @Query("SELECT t FROM Transporte t JOIN FETCH t.caixa LEFT JOIN FETCH t.cliente LEFT JOIN FETCH t.transportadora")
     List<Transporte> findAllWithCaixa();
     
   
-    @Query("SELECT t FROM Transporte t JOIN FETCH t.caixa c WHERE c.id = :caixaId")
+    @Query("SELECT t FROM Transporte t JOIN FETCH t.caixa c LEFT JOIN FETCH t.cliente LEFT JOIN FETCH t.transportadora WHERE c.id = :caixaId")
     List<Transporte> findAllByCaixaIdWithCaixa(@Param("caixaId") Long caixaId);
 
-    @Query("SELECT t FROM Transporte t JOIN FETCH t.caixa WHERE t.id IN :ids")
+    @Query("SELECT t FROM Transporte t JOIN FETCH t.caixa LEFT JOIN FETCH t.cliente LEFT JOIN FETCH t.transportadora WHERE t.id IN :ids")
     List<Transporte> findAllByIdsWithCaixa(@Param("ids") List<Long> ids);
 }
