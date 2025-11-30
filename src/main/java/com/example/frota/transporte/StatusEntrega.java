@@ -6,5 +6,6 @@ public enum StatusEntrega {
     COLETA,
     EM_PROCESSAMENTO,
     A_CAMINHO_DA_ENTREGA,
-    ENTREGUE
+    ENTREGUE,
+    FINALIZADO
 }

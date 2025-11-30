@@ -9,6 +9,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import jakarta.persistence.GenerationType;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "caixa")
@@ -26,10 +27,18 @@ public class Caixa {
     private double altura;
     private double largura;
     private double profundidade;
+    
+    // Novos campos para compatibilidade com testes
+    private double comprimento; // = profundidade 
+    private double peso;
+    
+    // Campo para testes
+    private LocalDateTime dataCriacao;
 
     // Construtores, getters e setters
     public Caixa() {
     }
+    
     public Caixa(Long id, String material, double capacidadeKg, boolean disponivel, double altura, double largura, double profundidade ) {
         this.id = id;
         this.material = material;
@@ -38,6 +47,21 @@ public class Caixa {
         this.altura = altura;
         this.largura = largura;
         this.profundidade = profundidade;
+        this.comprimento = profundidade; // Para compatibilidade
+    }
+    
+    // Métodos de compatibilidade
+    public void setComprimento(double comprimento) {
+        this.comprimento = comprimento;
+        this.profundidade = comprimento; // Sincroniza
+    }
+    
+    public double getComprimento() {
+        return this.profundidade; // Retorna profundidade como comprimento
+    }
+    
+    public void setDataCriacao(LocalDateTime dataCriacao) {
+        this.dataCriacao = dataCriacao;
     }
 
     public double getVolume() {

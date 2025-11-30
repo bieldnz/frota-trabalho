@@ -10,6 +10,9 @@ public record DadosRegistroViagem(
     @NotNull(message = "O ID do caminhão é obrigatório")
     Long caminhaoId,
     
+    @NotNull(message = "O ID do motorista é obrigatório")
+    Long motoristaId,
+    
     @NotEmpty(message = "A lista de IDs de transportes é obrigatória")
     List<Long> transportesIds,
     

@@ -1,6 +1,8 @@
 package com.example.frota.transporte;
 
 import com.example.frota.caixa.Caixa;
+import com.example.frota.cliente.Cliente;
+import com.example.frota.transportadora.Transportadora;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Entity;
@@ -38,6 +40,16 @@ public class Transporte {
 	@JoinColumn(name = "caixa_id", referencedColumnName = "caixa_id")
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     Caixa caixa;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cliente_id", referencedColumnName = "id")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    Cliente cliente;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "transportadora_id", referencedColumnName = "id")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    Transportadora transportadora;
 
 	String produto;
 
@@ -49,8 +61,16 @@ public class Transporte {
     String origem;
     String destino;
 	double valorFrete;
+    
     @Enumerated(EnumType.STRING)
-    StatusEntrega status = StatusEntrega.SOLICITADO;
+    StatusEntrega statusGeral = StatusEntrega.SOLICITADO;
+    
+    @Enumerated(EnumType.STRING)
+    StatusEntrega statusMotorista = StatusEntrega.SOLICITADO;
+    
+    @Enumerated(EnumType.STRING)
+    StatusEntrega statusCliente = StatusEntrega.SOLICITADO;
+    
     LocalDateTime horarioRetirada;
     String statusPagamento;
 
@@ -69,7 +89,9 @@ public class Transporte {
         // Novos campos
         this.horarioRetirada = dto.horarioRetirada();
         this.statusPagamento = dto.statusPagamento();
-        this.status = StatusEntrega.SOLICITADO;
+        this.statusGeral = StatusEntrega.SOLICITADO;
+        this.statusMotorista = StatusEntrega.SOLICITADO;
+        this.statusCliente = StatusEntrega.SOLICITADO;
     }
     
     // Método de atualização de dados, exceto o status, que é atualizado separadamente.
@@ -86,5 +108,58 @@ public class Transporte {
         this.horarioRetirada = dto.horarioRetirada();
         this.statusPagamento = dto.statusPagamento();
         this.valorFrete = valorFrete;
+    }
+    
+    /**
+     * Atualiza o status do motorista e verifica se deve finalizar o transporte
+     */
+    public void atualizarStatusMotorista(StatusEntrega novoStatus) {
+        this.statusMotorista = novoStatus;
+        verificarFinalizacao();
+    }
+    
+    /**
+     * Atualiza o status do cliente e verifica se deve finalizar o transporte
+     */
+    public void atualizarStatusCliente(StatusEntrega novoStatus) {
+        this.statusCliente = novoStatus;
+        verificarFinalizacao();
+    }
+    
+    /**
+     * Verifica se ambos os status são ENTREGUE para finalizar automaticamente
+     */
+    private void verificarFinalizacao() {
+        if (this.statusMotorista == StatusEntrega.ENTREGUE && 
+            this.statusCliente == StatusEntrega.ENTREGUE) {
+            this.statusGeral = StatusEntrega.FINALIZADO;
+        } else {
+            // Atualiza status geral com base no menor status entre motorista e cliente
+            this.statusGeral = obterStatusMinimo();
+        }
+    }
+    
+    /**
+     * Retorna o status mínimo entre motorista e cliente
+     */
+    private StatusEntrega obterStatusMinimo() {
+        if (statusMotorista.ordinal() <= statusCliente.ordinal()) {
+            return statusMotorista;
+        }
+        return statusCliente;
+    }
+    
+    /**
+     * Define o cliente do transporte
+     */
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+    
+    /**
+     * Define a transportadora do transporte
+     */
+    public void setTransportadora(Transportadora transportadora) {
+        this.transportadora = transportadora;
     }
 }

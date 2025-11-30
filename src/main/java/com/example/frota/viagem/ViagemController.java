@@ -27,14 +27,19 @@ public class ViagemController {
 
     // /viagem - Lista todas as viagens
     @GetMapping
-    public ResponseEntity<List<Viagem>> listarTodas() {
-        return ResponseEntity.ok(viagemService.procurarTodos());
+    public ResponseEntity<List<DadosDetalhamentoViagem>> listarTodas() {
+        List<DadosDetalhamentoViagem> viagens = viagemService.procurarTodos()
+                .stream()
+                .map(DadosDetalhamentoViagem::new)
+                .collect(java.util.stream.Collectors.toList());
+        return ResponseEntity.ok(viagens);
     }
 
     // viagem/{id} - Busca viagem por ID
     @GetMapping("/{id}")
-    public ResponseEntity<Viagem> buscarPorId(@PathVariable Long id) {
+    public ResponseEntity<DadosDetalhamentoViagem> buscarPorId(@PathVariable Long id) {
         return viagemService.procurarPorId(id)
+            .map(DadosDetalhamentoViagem::new)
             .map(ResponseEntity::ok)
             .orElseGet(() -> ResponseEntity.notFound().build());
     }
@@ -45,12 +50,13 @@ public class ViagemController {
     public ResponseEntity<?> registrar(@RequestBody @Valid DadosRegistroViagem dto) {
         try {
             Viagem novaViagem = viagemService.registrarViagem(dto);
+            DadosDetalhamentoViagem viagemDetalhes = new DadosDetalhamentoViagem(novaViagem);
             URI location = ServletUriComponentsBuilder
 					.fromCurrentRequest()
 					.path("/{id}")
 					.buildAndExpand(novaViagem.getId())
 					.toUri();
-			return ResponseEntity.created(location).body(novaViagem);
+            return ResponseEntity.created(location).body(viagemDetalhes);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
@@ -62,7 +68,8 @@ public class ViagemController {
     public ResponseEntity<?> finalizar(@PathVariable Long id, @RequestBody @Valid DadosFinalizacaoViagem dados) {
         try {
             Viagem viagemFinalizada = viagemService.finalizarViagem(id, dados);
-            return ResponseEntity.ok(viagemFinalizada);
+            DadosDetalhamentoViagem viagemDetalhes = new DadosDetalhamentoViagem(viagemFinalizada);
+            return ResponseEntity.ok(viagemDetalhes);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

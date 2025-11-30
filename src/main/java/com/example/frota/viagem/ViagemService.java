@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 import com.example.frota.caminhao.Caminhao;
 import com.example.frota.caminhao.CaminhaoService;
+import com.example.frota.motorista.Motorista;
+import com.example.frota.motorista.MotoristaService;
 import com.example.frota.transporte.Transporte;
 import com.example.frota.transporte.TransporteService;
 import com.example.frota.transporte.StatusEntrega;
@@ -25,11 +27,25 @@ public class ViagemService {
     private CaminhaoService caminhaoService;
     
     @Autowired
+    private MotoristaService motoristaService;
+    
+    @Autowired
     private TransporteService transporteService;
 
     public Viagem registrarViagem(DadosRegistroViagem dto) {
         Caminhao caminhao = caminhaoService.procurarPorId(dto.caminhaoId())
                 .orElseThrow(() -> new EntityNotFoundException("Caminhão não encontrado com ID: " + dto.caminhaoId()));
+
+        Motorista motorista = motoristaService.procurarPorId(dto.motoristaId())
+                .orElseThrow(() -> new EntityNotFoundException("Motorista não encontrado com ID: " + dto.motoristaId()));
+
+        // Validar se motorista está ativo e disponível
+        if (!motorista.getAtivo()) {
+            throw new IllegalArgumentException("Motorista não está ativo");
+        }
+        if (!motorista.getDisponivel()) {
+            throw new IllegalArgumentException("Motorista não está disponível");
+        }
 
         if (dto.kmSaida() < caminhao.getKmAtual()) {
             throw new IllegalArgumentException("A KM de saída não pode ser menor que a KM atual do caminhão (" + caminhao.getKmAtual() + ").");
@@ -43,17 +59,21 @@ public class ViagemService {
        
         // Verifica se todos os transportes estão em status SOLICITADO e atualiza para COLETA
         for (Transporte t : transportes) {
-            if (t.getStatus() != StatusEntrega.SOLICITADO) {
+            if (t.getStatusGeral() != StatusEntrega.SOLICITADO) {
                 throw new IllegalArgumentException("Transporte ID " + t.getId() + " não está em status SOLICITADO.");
             }
         }
         
-        Viagem novaViagem = new Viagem(caminhao, dto.kmSaida());
+        Viagem novaViagem = new Viagem(caminhao, motorista, dto.kmSaida());
         
         for (Transporte t : transportes) {
             novaViagem.adicionarTransporte(t);
             transporteService.atualizarStatus(t.getId(), StatusEntrega.COLETA);
         }
+
+        // Marcar motorista como indisponível
+        motorista.setDisponivel(false);
+        motoristaService.salvar(motorista);
 
         // Se a Viagem for salva, o caminhão fica "em viagem".
         return viagemRepository.save(novaViagem);
@@ -85,9 +105,16 @@ public class ViagemService {
 
         // Atualiza o status dos transportes para a próxima fase (EM_PROCESSAMENTO)
         for (Transporte t : viagem.getTransportes()) {
-            if (t.getStatus() == StatusEntrega.COLETA) {
+            if (t.getStatusGeral() == StatusEntrega.COLETA) {
                  transporteService.atualizarStatus(t.getId(), StatusEntrega.EM_PROCESSAMENTO);
             }
+        }
+
+        // Marcar motorista como disponível novamente
+        Motorista motorista = viagem.getMotorista();
+        if (motorista != null && motorista.getAtivo()) {
+            motorista.setDisponivel(true);
+            motoristaService.salvar(motorista);
         }
         
         return viagemRepository.save(viagem);

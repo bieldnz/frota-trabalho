@@ -1,0 +1,2 @@
+cliente, cliente tem que ser capaz de falar se a viagem foi coletada e finalizada
+get com opcoes de tranposrte antes do post

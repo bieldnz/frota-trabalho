@@ -7,6 +7,10 @@ public record DetalheTransporteDto(
     Long id,
     String produto,
     Long caixaId,
+    Long clienteId,
+    String nomeCliente,
+    Long transportadoraId,
+    String nomeTransportadora,
     double comprimento,
     double largura,
     double altura,
@@ -15,7 +19,9 @@ public record DetalheTransporteDto(
     String origem,
     String destino,
     double valorFrete,
-    String status, // Representa o enum StatusEntrega
+    String statusGeral,
+    String statusMotorista,
+    String statusCliente,
     LocalDateTime horarioRetirada,
     String statusPagamento
 ) {
@@ -23,8 +29,11 @@ public record DetalheTransporteDto(
         this(
             transporte.getId(),
             transporte.getProduto(),
-            // Acesso seguro, pois o Service/Repository garante o Eager Loading
-            transporte.getCaixa().getId(), 
+            transporte.getCaixa() != null ? transporte.getCaixa().getId() : null,
+            transporte.getCliente() != null ? transporte.getCliente().getId() : null,
+            transporte.getCliente() != null ? transporte.getCliente().getNome() : null,
+            transporte.getTransportadora() != null ? transporte.getTransportadora().getId() : null,
+            transporte.getTransportadora() != null ? transporte.getTransportadora().getNome() : null,
             transporte.getComprimento(),
             transporte.getLargura(),
             transporte.getAltura(),
@@ -33,7 +42,9 @@ public record DetalheTransporteDto(
             transporte.getOrigem(),
             transporte.getDestino(),
             transporte.getValorFrete(),
-            transporte.getStatus().toString(),
+            transporte.getStatusGeral().toString(),
+            transporte.getStatusMotorista().toString(),
+            transporte.getStatusCliente().toString(),
             transporte.getHorarioRetirada(),
             transporte.getStatusPagamento()
         );

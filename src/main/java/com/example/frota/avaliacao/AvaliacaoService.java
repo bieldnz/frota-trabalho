@@ -26,8 +26,8 @@ public class AvaliacaoService {
         Transporte transporte = transporteService.procurarPorIdComCaixa(dto.transporteId()) 
         .orElseThrow(() -> new EntityNotFoundException("Transporte não encontrado com ID: " + dto.transporteId()));
             
-    if (transporte.getStatus() != StatusEntrega.ENTREGUE) {
-        throw new IllegalArgumentException("A avaliação só pode ser registrada após a entrega (status: ENTREGUE). Status atual: " + transporte.getStatus());
+    if (transporte.getStatusGeral() != StatusEntrega.ENTREGUE) {
+        throw new IllegalArgumentException("A avaliação só pode ser registrada após a entrega (status: ENTREGUE). Status atual: " + transporte.getStatusGeral());
     }
       
         //  Verificar se já existe uma avaliação

@@ -11,6 +11,10 @@ public record CadastroTransporte(
     double largura,
     double altura,
     Long caixaId,
+    @NotNull(message = "Cliente é obrigatório") 
+    Long clienteId,
+    @NotNull(message = "Transportadora é obrigatória") 
+    Long transportadoraId,
     double peso,
     int quantidade,
     @NotBlank String origem,

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.example.frota.caminhao.Caminhao;
+import com.example.frota.motorista.Motorista;
 import com.example.frota.transporte.Transporte;
 
 import jakarta.persistence.CascadeType;
@@ -37,6 +38,10 @@ public class Viagem {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "caminhao_id", referencedColumnName = "caminhao_id")
     private Caminhao caminhao;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "motorista_id", referencedColumnName = "id")
+    private Motorista motorista;
     
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
     @JoinTable(
@@ -60,8 +65,9 @@ public class Viagem {
     
     private boolean finalizada = false;
 
-    public Viagem(Caminhao caminhao, double kmSaida) {
+    public Viagem(Caminhao caminhao, Motorista motorista, double kmSaida) {
         this.caminhao = caminhao;
+        this.motorista = motorista;
         this.kmSaida = kmSaida;
         this.dataHoraSaida = LocalDateTime.now();
     }

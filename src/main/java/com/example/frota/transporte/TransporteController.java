@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import org.springframework.web.bind.annotation.RequestParam;
+
 import org.springframework.web.bind.annotation.RestController; 
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -99,6 +101,52 @@ public class TransporteController {
             return ResponseEntity.badRequest().body(null);
         }
     }
+
+    @GetMapping("/disponiveis")
+    public ResponseEntity<List<TransportadoraFreteDto>> buscarDisponiveis(
+            @RequestParam double peso,
+            @RequestParam double comprimento,
+            @RequestParam double largura,
+            @RequestParam double altura,
+            @RequestParam int quantidade,
+            @RequestParam String origem,
+            @RequestParam String destino) {
+        
+        List<TransportadoraFreteDto> transportadorasDisponiveis = transporteService.procurarDisponiveis(
+                peso, comprimento, largura, altura, quantidade, origem, destino);
+        return ResponseEntity.ok(transportadorasDisponiveis);
+    }
+
+    /**
+     * Atualiza o status do motorista
+     */
+    @PutMapping("/{id}/status/motorista")
+    public ResponseEntity<DetalheTransporteDto> atualizarStatusMotorista(
+            @PathVariable Long id, 
+            @RequestParam StatusEntrega status) {
+        try {
+            DetalheTransporteDto transporteAtualizado = transporteService.atualizarStatusMotorista(id, status);
+            return ResponseEntity.ok(transporteAtualizado);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    
+    /**
+     * Atualiza o status do cliente
+     */
+    @PutMapping("/{id}/status/cliente")
+    public ResponseEntity<DetalheTransporteDto> atualizarStatusCliente(
+            @PathVariable Long id, 
+            @RequestParam StatusEntrega status) {
+        try {
+            DetalheTransporteDto transporteAtualizado = transporteService.atualizarStatusCliente(id, status);
+            return ResponseEntity.ok(transporteAtualizado);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 
 
     @DeleteMapping("/{id}")
