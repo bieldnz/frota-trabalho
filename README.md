@@ -1,8 +1,15 @@
 # 🚚 Sistema de Gestão de Frota
 
-Um sistema completo para gestão de transporte e logística, desenvolvido em Spring Boot com funcionalidades avançadas de cálculo de frete e sistema de double check para entregas.
+Um sistema completo para gestão de transporte e logística, desenvolvido em Spring Boot com funcionalidades avançadas de cálculo de frete, gestão de motoristas e sistema de double check para entregas.
 
 ## 🎯 Principais Funcionalidades
+
+### 👨‍💼 Gestão Completa de Motoristas
+- **CRUD completo** com CNH obrigatória
+- **Status de disponibilidade** (disponível/ocupado)
+- **Status ativo/inativo** para controle
+- **Localização em tempo real** com coordenadas
+- **Integração obrigatória** com viagens
 
 ### 🔄 Sistema de Double Check
 - **Confirmação dupla** de entregas (motorista + cliente)
@@ -14,12 +21,15 @@ Um sistema completo para gestão de transporte e logística, desenvolvido em Spr
 - **Preços personalizados** por transportadora
 - **Integração Google Maps** para distância real
 - **Comparação automática** de preços
+- **Formatação monetária** com 2 decimais
+- **Cálculo corrigido** com fatores realistas
 
 ### 👥 Gestão Completa
 - **Clientes** com validações brasileiras
-- **Transportadoras** com avaliações
-- **Frota** de caminhões e motoristas
-- **Viagens** otimizadas
+- **Transportadoras** com avaliações e estatísticas
+- **Frota** de caminhões com manutenção
+- **Viagens** otimizadas com motorista obrigatório
+- **Sistema de avaliações** pós-entrega
 
 ## 🛠️ Tecnologias
 
@@ -73,79 +83,167 @@ docker-compose up
 
 ### Insomnia Collection
 Importe o arquivo `insomnia_collection.json` que contém:
-- ✅ **83 endpoints** configurados
-- 🧪 **Dados de teste** prontos
+- ✅ **100+ endpoints** configurados
+- 🧪 **Dados de teste** prontos  
 - 📋 **Cenários completos** de uso
+- 🔧 **URLs corrigidas** e atualizadas
 
-### Fluxo de Teste
+### Principais Endpoints
+```http
+# MOTORISTAS
+POST   /motorista                       # Criar (CNH obrigatória)
+PUT    /motorista/{id}/disponibilidade  # Alterar disponibilidade  
+PUT    /motorista/{id}/ativo            # Ativar/desativar
+GET    /motorista/cpf/{cpf}             # Buscar por CPF
+GET    /motorista/cnh/{cnh}             # Buscar por CNH
+GET    /motorista/contadores/disponiveis # Contar disponíveis
+
+# TRANSPORTE
+GET    /transporte/disponiveis          # Buscar com frete calculado
+PUT    /transporte/{id}/status/motorista # Status motorista
+PUT    /transporte/{id}/status/cliente   # Status cliente
+
+# VIAGENS (NOVO)
+POST   /viagem                          # Criar (motorista obrigatório)
+PUT    /viagem/{id}/finalizar           # Finalizar com KM e combustível
+```
+
+### Fluxo de Teste Completo
 ```mermaid
 graph TD
     A[Criar Cliente] --> B[Criar Transportadora]
-    B --> C[Buscar Transportadoras Disponíveis]
-    C --> D[Criar Transporte]
-    D --> E[Motorista: Status ENTREGUE]
-    E --> F[Cliente: Status ENTREGUE]
-    F --> G[Sistema: FINALIZADO]
+    B --> C[Criar Motorista] 
+    C --> D[Buscar Transportadoras Disponíveis]
+    D --> E[Criar Transporte]
+    E --> F[Criar Viagem com Motorista]
+    F --> G[Motorista: Status ENTREGUE]
+    G --> H[Cliente: Status ENTREGUE]
+    H --> I[Sistema: FINALIZADO]
+    I --> J[Criar Avaliação]
 ```
 
 ## 🏗️ Arquitetura
 
 ```
 📁 com.example.frota
-├── 👥 cliente/          # Gestão de clientes
-├── 🚚 transportadora/   # Empresas de transporte  
-├── 📦 transporte/       # Solicitações de transporte
-├── 📋 caixa/           # Tipos de embalagens
-├── 🚛 caminhao/        # Frota de veículos
-├── 👨‍💼 motorista/       # Motoristas e localização
-├── 🗺️ viagem/           # Agrupamento de transportes
-└── ⭐ avaliacao/       # Sistema de feedback
+├── 👥 cliente/          # Gestão completa de clientes
+├── 🚚 transportadora/   # Empresas com estatísticas  
+├── 📦 transporte/       # Solicitações com double-check
+├── 📋 caixa/           # Tipos e capacidades
+├── 🚛 caminhao/        # Frota com manutenção
+├── 👨‍💼 motorista/       # CNH + disponibilidade + localização
+├── 🗺️ viagem/           # Agrupamento obrigatório com motorista
+├── ⭐ avaliacao/       # Sistema de feedback
+├── 🔧 manutencao/      # Controle preventivo
+├── 📊 planejamento/    # Sugestões inteligentes
+└── ❌ errors/          # Tratamento centralizado
 ```
 
 ## 📊 Banco de Dados
 
 ### Principais Entidades
 - **Cliente**: Dados pessoais + endereço + validações BR
-- **Transportadora**: CNPJ + preços + avaliação
-- **Transporte**: Produto + origem/destino + 3 status
+- **Transportadora**: CNPJ + preços + avaliação + estatísticas
+- **Motorista**: CNH obrigatória + ativo + disponível + localização
+- **Transporte**: Produto + origem/destino + 3 status (geral, motorista, cliente)
+- **Viagem**: Motorista obrigatório + agrupamento + KM + combustível
 - **Caixa**: Dimensões + peso máximo
-- **Viagem**: Agrupamento + motorista + caminhão
+- **Manutenção**: Controle preventivo da frota
+- **Avaliação**: Feedback pós-entrega
 
 ### Relacionamentos
 ```sql
 Cliente 1:N Transporte N:1 Transportadora
 Transporte N:1 Caixa
 Transporte N:1 Viagem N:1 Motorista
+Transporte N:1 Viagem N:1 Caminhao
+Transporte 1:N Avaliacao
+Caminhao 1:N Manutencao
 ```
 
 ## 🎮 Funcionalidades por Módulo
 
 ### 👥 Cliente
 ```http
-POST   /clientes                    # Criar
+POST   /clientes                    # Criar com validações BR
 GET    /clientes                    # Listar (paginado)
 GET    /clientes/{id}               # Buscar por ID
 PUT    /clientes/{id}               # Atualizar  
 DELETE /clientes/{id}               # Desativar
+GET    /clientes/buscar             # Buscar por nome
 GET    /clientes/buscar/email       # Buscar por email
+GET    /clientes/estatisticas       # Estatísticas gerais
 ```
 
 ### 🚚 Transportadora
 ```http
-POST   /transportadoras             # Criar
-GET    /transportadoras             # Listar (filtros)
-PUT    /transportadoras/{id}        # Atualizar
-PUT    /transportadoras/{id}/avaliacao  # Avaliar
+POST   /transportadoras             # Criar com preços
+GET    /transportadoras             # Listar com filtros
+PUT    /transportadoras/{id}        # Atualizar dados
+PUT    /transportadoras/{id}/avaliacao  # Atualizar avaliação
+DELETE /transportadoras/{id}        # Desativar
 GET    /transportadoras/buscar/nome # Buscar por nome
 GET    /transportadoras/buscar/cnpj # Buscar por CNPJ
+GET    /transportadoras/avaliacoes  # Por avaliação mínima
+GET    /transportadoras/top         # Top transportadoras
+GET    /transportadoras/ativas      # Apenas ativas
+GET    /transportadoras/estatisticas # Estatísticas gerais
+```
+
+### 👨‍💼 Motorista (NOVO MÓDULO COMPLETO)
+```http
+POST   /motorista                   # Criar (CNH obrigatória)
+PUT    /motorista                   # Atualizar dados
+PUT    /motorista/{id}/disponibilidade # Alterar disponibilidade
+PUT    /motorista/{id}/ativo        # Ativar/desativar
+PUT    /motorista/{id}/localizacao  # Atualizar GPS
+GET    /motorista/{id}              # Buscar por ID
+GET    /motorista                   # Listar todos
+GET    /motorista/paginado          # Listar paginado
+GET    /motorista/buscar            # Buscar por nome
+GET    /motorista/cpf/{cpf}         # Buscar por CPF
+GET    /motorista/cnh/{cnh}         # Buscar por CNH
+GET    /motorista/contadores/disponiveis # Contar disponíveis
+POST   /motorista/rastrear          # Rastreamento
+PUT    /motorista/entregar/{id}     # Finalizar entrega
 ```
 
 ### 📦 Transporte  
 ```http
-POST   /transporte                  # Criar (com cliente + transportadora)
-GET    /transporte/disponiveis      # Buscar transportadoras + frete
-PUT    /transporte/{id}/status/motorista   # Status motorista
-PUT    /transporte/{id}/status/cliente     # Status cliente
+POST   /transporte                  # Criar completo
+GET    /transporte                  # Listar todos
+GET    /transporte/{id}             # Buscar por ID
+GET    /transporte/caixa/{id}       # Por caixa
+PUT    /transporte/{id}             # Atualizar
+PUT    /transporte/{id}/status/{status} # Status geral
+DELETE /transporte/{id}             # Cancelar
+GET    /transporte/disponiveis      # Buscar com frete calculado
+PUT    /transporte/{id}/status/motorista # Status motorista
+PUT    /transporte/{id}/status/cliente  # Status cliente
+```
+
+### 🗺️ Viagem
+```http
+POST   /viagem                      # Criar (motorista obrigatório)
+GET    /viagem                      # Listar todas
+GET    /viagem/{id}                 # Buscar por ID
+PUT    /viagem/{id}/finalizar       # Finalizar com KM/combustível
+DELETE /viagem/{id}                 # Cancelar viagem
+```
+
+### 🔧 Manutenção
+```http
+POST   /manutencao                  # Registrar manutenção
+GET    /manutencao                  # Listar todas
+GET    /manutencao/{id}             # Buscar por ID
+GET    /manutencao/alerta/{caminhaoId} # Alertas por caminhão
+```
+
+### ⭐ Avaliação
+```http
+POST   /avaliacao                   # Registrar feedback
+GET    /avaliacao                   # Listar todas
+GET    /avaliacao/{id}              # Buscar por ID
 ```
 
 ## 🔧 Configuração Avançada
@@ -199,14 +297,34 @@ Garante segurança nas entregas através de confirmação dupla:
 
 ### 💡 Cálculo de Frete Inteligente
 ```java
-// Algoritmo considera múltiplos fatores
+// Algoritmo corrigido com fatores realistas
 peso_considerado = max(peso_real, peso_cubado)
-peso_cubado = (comp × larg × alt) × fator_cubagem
+peso_cubado = (comp × larg × alt) × fator_cubagem // 0.3 (corrigido de 300!)
 
 frete_peso = (peso × valor_kg) + (km × valor_km) + pedágio
 frete_caixa = (qtd × valor_caixa) + (km × valor_km) + pedágio
 
 frete_final = max(frete_peso, frete_caixa)
+// Resultado formatado com 2 decimais usando BigDecimal
+```
+
+### 🔧 Sistema de Tratamento de Erros
+Mais de **15 exceções customizadas** para controle completo:
+```java
+// Motorista
+CnhJaExisteException
+CpfJaExisteException  
+MotoristaInativoException
+MotoristaIndisponivelException
+
+// Cliente/Transportadora
+EmailJaExisteException
+CnpjJaExisteException
+
+// Negócio
+ProdutoNaoCabeNaCaixaException
+ViagemJaFinalizadaException
+TransporteJaEntregueException
 ```
 
 ### 🗺️ Integração Google Maps
@@ -219,31 +337,73 @@ frete_final = max(frete_peso, frete_caixa)
 ### Validações Automáticas
 - **Cliente**: Email único, telefone BR, CPF válido
 - **Transportadora**: CNPJ único, preços positivos
+- **Motorista**: CNH única, CPF único, validações específicas
 - **Transporte**: Produto cabe na caixa, entidades ativas
+- **Viagem**: Motorista disponível, caminhão disponível
 
-### Exceções Customizadas
+### Exceções Customizadas por Módulo
 ```java
+// Cliente
 ClienteNotFoundException
-TransportadoraNotFoundException  
-ProdutoNaoCabeNaCaixaException
 EmailJaExisteException
-CNPJJaExisteException
+
+// Transportadora  
+TransportadoraNotFoundException
+CnpjJaExisteException
+
+// Motorista
+MotoristaNotFoundException
+CnhJaExisteException
+CpfJaExisteException
+MotoristaInativoException
+MotoristaIndisponivelException
+
+// Transporte/Viagem
+ProdutoNaoCabeNaCaixaException
+ViagemJaFinalizadaException
+TransporteJaEntregueException
+```
+
+### GlobalExceptionHandler
+Tratamento centralizado com respostas padronizadas:
+```java
+@RestControllerAdvice
+public class GlobalExceptionHandler {
+    // Retorna status HTTP apropriado + mensagem clara
+    // Log estruturado para debugging
+    // Validação automática de campos
+}
 ```
 
 ## 📊 Monitoramento
 
 ### Logs Estruturados
 ```java
-// Exemplo de log com contexto
+// Exemplo de logs com contexto completo
 logger.info("Transporte criado: id={}, cliente={}, transportadora={}, valor={}", 
     transporte.getId(), cliente.getNome(), transportadora.getNome(), valorFrete);
+
+logger.info("Motorista {} alterou disponibilidade para: {}", 
+    motorista.getNome(), disponivel);
+
+logger.info("Cálculo de frete - Peso real: {}, Peso cubado: {}, Peso considerado: {}", 
+    pesoReal, pesoCubado, pesoConsiderado);
 ```
 
 ### Métricas Importantes
-- Tempo de resposta das APIs
-- Taxa de finalização de entregas  
-- Avaliação média das transportadoras
-- Volume de transportes por região
+- **Performance**: Tempo de resposta das APIs
+- **Negócio**: Taxa de finalização de entregas  
+- **Qualidade**: Avaliação média das transportadoras
+- **Operacional**: Volume de transportes por região
+- **Frota**: Motoristas disponíveis vs. ocupados
+- **Financeiro**: Valor médio de frete calculado
+
+### Endpoints de Estatísticas
+```http
+GET /clientes/estatisticas        # Clientes ativos/inativos
+GET /transportadoras/estatisticas # Performance transportadoras  
+GET /motorista/contadores/disponiveis # Disponibilidade em tempo real
+```
 
 ## 🤝 Contribuição
 
