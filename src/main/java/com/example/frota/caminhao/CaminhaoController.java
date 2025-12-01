@@ -21,6 +21,8 @@ import com.example.frota.marca.MarcaService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 @RestController
@@ -91,6 +93,16 @@ public class CaminhaoController {
             return ResponseEntity.ok(dtoAtualizado);
         } catch (EntityNotFoundException e) {
             return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/logs")
+    public ResponseEntity<List<String>> obterLogs() {
+        try {
+            List<String> logs = caminhaoService.obterOperacoes();
+            return ResponseEntity.ok(logs);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(null);
         }
     }
 		
