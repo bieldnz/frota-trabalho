@@ -97,9 +97,19 @@ public class CaminhaoController {
     }
 
     @GetMapping("/logs")
-    public ResponseEntity<List<String>> obterLogs() {
+    public ResponseEntity<List<String>> obterLogs(
+        @RequestParam(required = false) int cod_caminhao,
+        @RequestParam(required = false) java.sql.Date data_inicio,
+        @RequestParam(required = false) java.sql.Date data_fim
+
+
+    ) {
         try {
-            List<String> logs = caminhaoService.obterOperacoes();
+            List<String> logs = caminhaoService.obterOperacoes(
+                cod_caminhao,
+                data_inicio,
+                data_fim
+            );
             return ResponseEntity.ok(logs);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(null);

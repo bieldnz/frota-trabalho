@@ -1,5 +1,6 @@
 package com.example.frota.caminhao;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -55,7 +56,9 @@ public class CaminhaoService {
 	    return caminhaoRepository.findById(id);
 	}
 
-    public List<String> obterOperacoes() {
-        return caminhaoRepository.operacoes();
+    public List<String> obterOperacoes(int cod_caminhao, Date data_inicio, Date data_fim) {
+        return caminhaoRepository.operacoes(
+            cod_caminhao, data_inicio, data_fim
+        );
     }
 }
