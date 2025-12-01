@@ -54,4 +54,8 @@ public class CaminhaoService {
 	public Optional<Caminhao> procurarPorId(Long id) {
 	    return caminhaoRepository.findById(id);
 	}
+
+    public List<String> obterOperacoes() {
+        return caminhaoRepository.operacoes();
+    }
 }
