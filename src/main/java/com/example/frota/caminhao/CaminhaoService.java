@@ -48,7 +48,7 @@ public class CaminhaoService {
 		return caminhaoRepository.findAll(Sort.by("modelo").ascending());
 	}
 	public void apagarPorId (Long id) {
-		caminhaoRepository.deleteById(id);
+        caminhaoRepository.apagarCaminhao(id);
 	}
 	
 	public Optional<Caminhao> procurarPorId(Long id) {
