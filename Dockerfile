@@ -6,7 +6,7 @@ WORKDIR /app
 
 # Copy POM and resolve dependencies (layer caching)
 COPY pom.xml ./
-RUN mvn -B -q -DskipTests dependency:go-offline
+RUN mvn -B -q dependency:resolve dependency:resolve-sources
 
 # Copy sources and build
 COPY src ./src

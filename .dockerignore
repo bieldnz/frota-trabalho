@@ -1,5 +1,10 @@
-# Maven
-target/
+# Maven (allow only final JAR)
+target/classes/
+target/generated-sources/
+target/generated-test-sources/
+target/maven-*
+target/test-classes/
+target/*.jar.original
 .mvn/
 
 # IDEs

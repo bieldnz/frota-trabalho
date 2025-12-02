@@ -11,6 +11,7 @@ services:
       MYSQL_DATABASE: frota
       MYSQL_USER: frota
       MYSQL_PASSWORD: frota
+    command: --log-bin-trust-function-creators=1 --binlog-format=ROW
     ports:
       - "3307:3306"
     volumes:
@@ -26,7 +27,7 @@ services:
   app:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.fast
     container_name: frota-app
     depends_on:
       db:

@@ -1,7 +1,11 @@
 package com.example.frota.caminhao;
 
-
 import java.util.List;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.logging.Logger;
+import java.util.Date;
 import java.net.URI;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +25,8 @@ import com.example.frota.marca.MarcaService;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
+
 import org.springframework.web.bind.annotation.RequestParam;
-
-
 
 @RestController
 @RequestMapping("/caminhao")
@@ -37,7 +40,7 @@ public class CaminhaoController {
 	
 	@Autowired
 	private MarcaService marcaService;
-	
+
 	@GetMapping                 
     public ResponseEntity<List<AtualizacaoCaminhao>> listarTodos (){ 
         List<Caminhao> caminhoes = caminhaoService.procurarTodos();
@@ -46,6 +49,44 @@ public class CaminhaoController {
             .toList();
 	    return ResponseEntity.ok(dtos);             
 	} 
+
+    @GetMapping("/test")
+    public ResponseEntity<String> test() {
+        System.out.println("=== ENDPOINT TEST CHAMADO ===");
+        return ResponseEntity.ok("FUNCIONANDO!");
+    }
+
+    @GetMapping("/logs")
+    public ResponseEntity<Map<String, Object>> obterLogs(
+        @RequestParam(required = false) Integer cod_caminhao
+    ) {
+        try {
+            System.out.println("=== CONTROLLER: INICIO - cod_caminhao: " + cod_caminhao);
+            
+            // Chama o service para buscar logs reais do banco (usa método obterOperacoes)
+            List<LogsCaminha> logs = caminhaoService.obterOperacoes(cod_caminhao, null, null);
+            
+            Map<String, Object> response = new HashMap<>();
+            response.put("status", "success");
+            response.put("cod_caminhao", cod_caminhao);
+            response.put("timestamp", System.currentTimeMillis());
+            response.put("logs", logs);
+            response.put("total", logs.size());
+            
+            System.out.println("=== CONTROLLER: LOGS OBTIDOS - " + logs.size() + " registros");
+            
+            return ResponseEntity.ok(response);
+            
+        } catch (Exception e) {
+            // Log do erro para debugging
+            System.err.println("ERRO no controller: " + e.getMessage());
+            e.printStackTrace();
+            
+            Map<String, Object> errorResponse = new HashMap<>();
+            errorResponse.put("error", e.getMessage());
+            return ResponseEntity.internalServerError().body(errorResponse);
+        }
+    }
     
 	@GetMapping("/{id}")
     public ResponseEntity<AtualizacaoCaminhao> buscarPorId(@PathVariable Long id) {
@@ -93,26 +134,6 @@ public class CaminhaoController {
             return ResponseEntity.ok(dtoAtualizado);
         } catch (EntityNotFoundException e) {
             return ResponseEntity.notFound().build();
-        }
-    }
-
-    @GetMapping("/logs")
-    public ResponseEntity<List<String>> obterLogs(
-        @RequestParam(required = false) int cod_caminhao,
-        @RequestParam(required = false) java.sql.Date data_inicio,
-        @RequestParam(required = false) java.sql.Date data_fim
-
-
-    ) {
-        try {
-            List<String> logs = caminhaoService.obterOperacoes(
-                cod_caminhao,
-                data_inicio,
-                data_fim
-            );
-            return ResponseEntity.ok(logs);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body(null);
         }
     }
 		

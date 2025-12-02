@@ -16,6 +16,6 @@ public interface CaminhaoRepository extends JpaRepository<Caminhao, Long>{
         void apagarCaminhao(@Param("caminhao_id") Long caminhaoId);
 
     @Procedure(procedureName = "listar_logs_caminhao")
-        List<String> operacoes(@Param("p_caminhao_id") int cod_caminhao, @Param("p_data_inicio") Date data_inicio, @Param("p_data_fim") Date data_fim);
+        List<LogsCaminha> operacoes(@Param("p_caminhao_id") int cod_caminhao, @Param("p_data_inicio") Date data_inicio, @Param("p_data_fim") Date data_fim);
     
 }
